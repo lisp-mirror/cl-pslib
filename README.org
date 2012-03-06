@@ -1,0 +1,103 @@
+* Introduction
+
+Cl-pslib is a (thin) wrapper around
+[[http://pslib.sourceforge.net/][pslib]] a library for generating
+PosScript files.
+
+* The wrapper
+Cl-pslib use CFFI and SWIG to interface with foreign (non lisp)
+library and generate the low-level lisp wrapper respectively.
+
+cl-pslib does not export the raw (CFFI) pslib API but use CLOS instead.
+
+A psdoc C struct pointer is wrapped in the class psdoc, most of the
+functions to manipulate this pointer are wrapped in lisp methods
+specialized for that class.
+
+** Parameters
+
+Pslib use a lot of parameters to configure its behavior.
+
+Example:
+
+#+BEGIN_SRC common-lisp
+ (get-value doc "boxheight")
+#+END_SRC
+
+I found this very unpractical so i tried to generate lisp
+constants to match the corresponding string parameter
+
+#+BEGIN_SRC common-lisp
+ (get-value doc +value-key-boxheight+)
+#+END_SRC
+
+
+** Function name
+As general rule the methods for the class psdoc are the same of the
+ones of the pslib with the character "_" substituted by "-".
+
+There are some exceptions listed below.
+
+| native name                                                | lisp name             |
+|------------------------------------------------------------+-----------------------|
+| PS\_set\_border\_color                                     | set-border-link-color |
+| PS\_set\_border\_dash                                      | set-border-link-dash  |
+| PS\_set\_border\_style                                     | set-border-link-style |
+| PS\_open, PS\_open\_mem                                    | open-doc              |
+| PS\_fill                                                   | fill-path             |
+| PS\_show and PS\_show2                                     | show                  |
+| PS\_show\_xy and PS\_show\_xy2                             | show-xy               |
+| PS\_string\_geometry, PS\_stringwidth and PS\_stringwidth2 | string-geometry       |
+| PS\_symbol                                                 | font-symbol           |
+| PS\_symbol\_name                                           | font-symbol-name      |
+| PS\_symbol\_width                                          | font-symbol-width     |
+|------------------------------------------------------------+-----------------------|
+
+** Other differences
+- setcolor can accept a cl-color object as parameter;
+- there is no '(ps_)boot' method; when an instance of psdoc in created the
+  'initialize-instance' of that class will call ps\_boot if needed.
+  The same is true for '(ps_)new' method;
+- 'open-doc' method will pass the oputput of pslib (i.e.the PostScript
+  file) to a lisp callback function if the second argument of the function is
+  nil; by default the callback just copy the output in ps:*callback-string*.
+  This maybe can be useful for generate a file in a web application.
+- the string-geometry method return an instance of text-metrics class
+* Issues
+
+  Note that the whole library is in an alpha stage, testing is still in
+  progress, please see [[NO WARRANTY][section below]]
+
+** Missing function
+   The high-level API does not still remap this functions:
+
+- PS\_free\_glyph\_list;
+- PS\_get\_buffer;
+- PS\_glyph\_list;
+- PS\_new2;
+- PS\_open\_fp;
+- PS\_hyphenate;
+- PS\_list\_parameters;
+- PS\_list\_resources;
+- PS\_list\_values;
+- PS\_set\_gstate;
+- PS\_setdash (use set-polydash instead).
+  
+* BUGS
+
+  Please send bug report to cage at katamail dot com
+
+* License
+  This library is released under Lisp Lesser General Public license (see
+  COPYING.LESSER file)
+
+  Examples are released under GPL version 3 or later
+
+* NO WARRANTY
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
+
+

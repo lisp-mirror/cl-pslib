@@ -1,0 +1,9 @@
+cl-pslib is a wrapper around the pslib library.
+
+cl-pslib is  licensed under  the terms of  the Lisp Lesser  GNU Public
+License  (http://opensource.franz.com/preamble.html),   known  as  the
+LLGPL.  The LLGPL consists of a preamble (see above URL) and the LGPL.
+Where  these conflict,  the  preamble takes  precedence.  cl-pslib  is
+referenced in the preamble as the "LIBRARY."
+
+Examples are released under GPL version 3 or later.
