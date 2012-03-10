@@ -106,6 +106,32 @@
    :point->centimeter
    :point->inch
 
+   :aabb->rect 
+   :rect->aabb 
+   :inside-aabb-p 
+   :line-eqn
+   :recursive-bezier 
+   :2d-vector-map 
+   :2d-vector-list-map 
+   :2d-vector-list-scale 
+   :2d-vector-list-translate 
+   :2d-vector-list-rotate 
+   :2d-vector-sum 
+   :2d-vector-diff 
+   :2d-vector-dot-product 
+   :2d-vector-cross-product 
+   :2d-vector-scale 
+   :2d-vector-translate 
+   :2d-vector-magn 
+   :2d-vector-normalize 
+   :2d-vector-angle 
+   :2d-vector-rotate 
+   :xy->pair 
+   :pair->interleaved-xy 
+   :xy->interleaved-xy 
+   :interleaved-xy->pair 
+
+
    :pslib_errornum<0
    :*callback-string*
    :write-to-string
@@ -308,6 +334,8 @@
    :font-symbol
    :font-symbol-name
    :font-symbol-width
-   :translate))
+   :translate
+   :curve-to
+   :bezier-to))
 
    

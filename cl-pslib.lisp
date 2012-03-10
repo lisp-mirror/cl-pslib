@@ -130,7 +130,10 @@
 (defgeneric font-symbol (object char))
 (defgeneric font-symbol-name (object idx name &optional font-id size))
 (defgeneric font-symbol-width (object idx  &optional font-id size))
-(defgeneric translate (object x y))  
+(defgeneric translate (object x y))
+
+(defgeneric curve-to (object p1 p2 p3))
+(defgeneric bezier-to (object p1 p2 p3 p4 &key threshold))
 
 (defun shutdown ()
   (ps_shutdown))
@@ -663,6 +666,18 @@
     (ps_translate ptr (conv-mt x) (conv-mt y))))
 
 
+(defmethod curve-to ((object psdoc) p1 p2 p3)
+  (curveto object 
+	   (conv-mt (first p1)) (conv-mt (second p1))
+	   (conv-mt (first p2)) (conv-mt (second p2))
+	   (conv-mt (first p3)) (conv-mt (second p3))))
+	   
+(defmethod bezier-to (object p1 p2 p3 p4 &key (threshold 0.1))
+  (let* ((ct-pts (mapcar #'(lambda (p) (list (conv-mt (first p)) (conv-mt (second p))))
+			 (list p1 p2 p3 p4)))
+	 (pairs (recursive-bezier ct-pts :threshold threshold)))
+    (format t "~a~%" pairs)
+    (mapcar #'(lambda (p) (lineto object (first p) (second p))) pairs)))
 
 
 

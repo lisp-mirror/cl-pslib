@@ -50,28 +50,34 @@
        (list (/ dy dx) (- (second a ) (* (/ dy dx) (first a))) nil nil)))))
   
        
-(defun recursive-bezier (pairs &key (num-iter 4))
-  (labels ((midpoint (pb pe)
-	     (mapcar #'(lambda (x) (/ x 2)) (2d-vector-sum pb pe))))
 
-    (if (> num-iter 0)
-	(let* ((p1 (first pairs))
-	       (p2 (second pairs))
-	       (p3 (third pairs))
-	       (p4 (fourth pairs))
-	       (p12 (midpoint p1 p2))
-	       (p23 (midpoint p2 p3))
-	       (p34 (midpoint p3 p4))
-	       (p12-23 (midpoint p12 p23))
-	       (p23-34 (midpoint p23 p34))
-	       (res (midpoint p12-23 p23-34)))
-	  (append (list p1)
-		  (recursive-bezier (list p1 p12 p12-23 res) :num-iter (- num-iter 1))
-		  (list res)
-		  (recursive-bezier (list res p23-34 p34 p4) :num-iter (- num-iter 1))
-		  (list p4)))
-				    
-	nil)))
+(defun recursive-bezier (pairs &key (threshold 1))
+  (labels ((midpoint (pb pe)
+	     (mapcar #'(lambda (x) (/ x 2)) (2d-vector-sum pb pe)))
+	   (eqvec-p (a b) (and (= (first a) (first b))
+			       (= (second a) (second b)))))
+
+    (let* ((p1 (first pairs))
+	   (p2 (second pairs))
+	   (p3 (third pairs))
+	   (p4 (fourth pairs))
+	   (p12 (midpoint p1 p2))
+	   (p23 (midpoint p2 p3))
+	   (p34 (midpoint p3 p4))
+	   (p12-23 (midpoint p12 p23))
+	   (p23-34 (midpoint p23 p34))
+	   (res (midpoint p12-23 p23-34)))
+      (if (>= (2d-vector-magn (2d-vector-diff p1 res)) threshold)
+	  (remove-duplicates
+	   (append (list p1)
+		   (recursive-bezier* (list p1 p12 p12-23 res) :threshold threshold)
+		   (list res)
+		   (recursive-bezier* (list res p23-34 p34 p4) :threshold threshold)
+		   (list p4))
+	   :test #'eqvec-p)
+	  nil))))
+    
+    
 	     
 
 (defmacro funcall-if-not-null (func val)
