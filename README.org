@@ -58,7 +58,7 @@ There are some exceptions listed below.
 - there is no '(ps_)boot' method; when an instance of psdoc in created the
   'initialize-instance' of that class will call ps\_boot if needed.
   The same is true for '(ps_)new' method;
-- 'open-doc' method will pass the oputput of pslib (i.e.the PostScript
+- 'open-doc' method will pass the output of pslib (i.e.the PostScript
   file) to a lisp callback function if the second argument of the function is
   nil; by default the callback just copy the output in ps:*callback-string*.
   This maybe can be useful for generate a file in a web application.
