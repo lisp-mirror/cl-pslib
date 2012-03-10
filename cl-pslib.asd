@@ -7,8 +7,11 @@
 
 
 (asdf:defsystem #:cl-pslib
+  :author "cage <cage@katamail.com>"
+  :description "A CFFI wrapper for the pslib library."
+  :licence "LLGPL"
+  :maintainer "cage <cage@katamail.com>"
   :version "0.0.1"
-  :license "LLGPL"
   :depends-on (:alexandria
                :cffi
 	       :cl-colors
