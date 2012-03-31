@@ -15,7 +15,7 @@
   :depends-on (:alexandria
                :cffi
 	       :cl-colors
-	       :cl-ppcre)
+	       :cl-ppcre-unicode)
   :components ((:file "package")
 	       (:file "conditions"
 		      :depends-on ("package"))

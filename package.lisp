@@ -252,6 +252,7 @@
    :+boxed-text-h-mode-left+
    :+boxed-text-h-mode-center+
    :*conversion-metrics*
+   :psdoc
    :open-doc
    :close-doc
    :shutdown

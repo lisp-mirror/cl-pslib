@@ -70,9 +70,9 @@
       (if (>= (2d-vector-magn (2d-vector-diff p1 res)) threshold)
 	  (remove-duplicates
 	   (append (list p1)
-		   (recursive-bezier* (list p1 p12 p12-23 res) :threshold threshold)
+		   (recursive-bezier (list p1 p12 p12-23 res) :threshold threshold)
 		   (list res)
-		   (recursive-bezier* (list res p23-34 p34 p4) :threshold threshold)
+		   (recursive-bezier (list res p23-34 p34 p4) :threshold threshold)
 		   (list p4))
 	   :test #'eqvec-p)
 	  nil))))
