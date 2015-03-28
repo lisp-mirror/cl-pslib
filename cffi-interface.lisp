@@ -27,7 +27,6 @@
 				       (foreign-string-to-lisp data :count size)))
   size)
 
-
 (defmacro with-list->foreign-array ((arr type &optional (fun #'identity)) 
 				    lst &body body)
   (alexandria:with-gensyms (ct)
@@ -35,7 +34,6 @@
        (dotimes (,ct (length ,lst))
 	 (setf (mem-aref ,arr ,type ,ct) (funcall ,fun (nth ,ct ,lst))))
        ,@body)))
-
 
 (defun pslib_errornum<0 (num)
   (if (< 0 num)
@@ -46,7 +44,6 @@
   (if (<= 0 num)
       nil
       t))
-
 
 (defun truth-lisp->c (val)
   (if val

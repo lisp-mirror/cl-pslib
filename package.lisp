@@ -295,6 +295,7 @@
    :end-pattern
    :end-template
    :findfont
+   :setfont
    :get-majorversion
    :get-minorversion
    :get-parameter
