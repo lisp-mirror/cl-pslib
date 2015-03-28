@@ -526,9 +526,9 @@
   (declare (ignore c1 c2 c3 c4))
   (with-psdoc-ptr (ptr) object
     (ps_setcolor ptr type +color-space-rgb+
-		 (co-sf (cl-colors:red color))
-		 (co-sf (cl-colors:green color))
-		 (co-sf (cl-colors:blue color))
+		 (co-sf (cl-colors:rgb-red color))
+		 (co-sf (cl-colors:rgb-green color))
+		 (co-sf (cl-colors:rgb-blue color))
 		 1.0)))
 
 (defmethod setflat ((object psdoc) (val number))
