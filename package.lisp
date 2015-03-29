@@ -332,6 +332,7 @@
    :shfill
    :show
    :show-xy
+   :show-boxed
    :string-geometry
    :font-symbol
    :font-symbol-name
