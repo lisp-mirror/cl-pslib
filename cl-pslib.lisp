@@ -307,7 +307,7 @@
 (defmethod add-bookmark ((object psdoc) (text string) (parent integer) open)
   (with-psdoc-ptr (ptr) object
     (let ((bookmark-id (ps_add_bookmark ptr text parent (truth-lisp->c open))))
-      (if (<= 0 bookmark-id)
+      (if (<= bookmark-id 0)
 	  (error 'bookmark-error
 		 :text (format nil "Can not set bookmark for ~a (parent ~a)"
 			       text parent))
@@ -481,7 +481,7 @@
 (defmethod makespotcolor ((object psdoc) (name string) &optional (reserved 0.0))
   (with-psdoc-ptr (ptr) object
     (let ((color-id (ps_makespotcolor ptr name reserved)))
-      (if (<= 0 color-id)
+      (if (<= color-id 0)
 	  (error 'spotcolor-error
 		 :text (format nil "Can not set spot color with name ~a" name))
 	  color-id))))
@@ -489,7 +489,7 @@
 (defmethod open-image-file ((object psdoc) (type string) (file-name string) (param string) (int-param integer))
   (with-psdoc-ptr (ptr) object
     (let ((image-id (ps_open_image_file ptr type file-name param int-param)))
-      (if (<= 0 image-id)
+      (if (<= image-id 0)
 	  (error 'image-load-error
 		 :text (format nil "File ~a is not a valid image file of type ~a" file-name type))
 	 image-id))))
@@ -506,14 +506,14 @@
 	  (let ((image-id (ps_open_image ptr type source data-arr length
 					 width height components bpc params)))
 
-	    (if (<= 0 image-id)
+	    (if (<= image-id 0)
 		(error 'image-load-error
 		       :text (format nil "Load of image from memory failed"))
 		image-id)))))
 
-(defmethod place-image ((object psdoc) (image-id integer) (x integer) (y integer) (scale number))
+(defmethod place-image ((object psdoc) (image-id integer) (x number) (y number) (scale number))
   (with-psdoc-ptr (ptr) object
-    (ps_place_image ptr image-id x y (co-sf scale))))
+    (ps_place_image ptr image-id (co-sf x) (co-sf y) (co-sf scale))))
 
 (defmethod rotate ((object psdoc) (rot number))
   (with-psdoc-ptr (ptr) object
@@ -605,7 +605,7 @@
 (defmethod shading-pattern ((object psdoc) (shading-id integer) &optional (option-list ""))
   (with-psdoc-ptr (ptr) object
     (let ((sh-pattern-id (ps_shading_pattern ptr shading-id option-list)))
-      (if (<= 0 sh-pattern-id)
+      (if (<= sh-pattern-id 0)
 	  (error 'shading-pattern-error
 		 :text (format nil "Shading pattern from shading-id: ~a failed." shading-id))
 	  sh-pattern-id))))

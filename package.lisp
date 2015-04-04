@@ -181,6 +181,7 @@
    :+value-key-separationcolor+
    :+value-key-textrise+
    :+value-key-leading+
+   :+value-key-linebreak+
    :+value-key-hyphenminchars+
    :+value-key-parindent+
    :+value-key-numindentlines+
@@ -218,6 +219,7 @@
    :+image-file-type-eps+
    :+image-type-raw+
    :+image-type-eps+
+   :+image-encoding-type-hex+
    :+shading-radial+
    :+shading-axial+
    :+shading-opt-extend0+
@@ -251,6 +253,7 @@
    :+boxed-text-h-mode-right+
    :+boxed-text-h-mode-left+
    :+boxed-text-h-mode-center+
+   :+boxed-text-value-boxheight+
    :*conversion-metrics*
    :psdoc
    :open-doc

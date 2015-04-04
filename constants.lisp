@@ -39,7 +39,7 @@
 			"textrise" "leading" "hyphenminchars"
 			"parindent" "numindentlines" "parskip"
 			"parindentskip" "linenumberspace" "linenumbersep"
-			"boxheight")
+			"boxheight" "linebreak")
 
 (define-string-constant ("parameter-key") "FontAFM" "FontOutline" "FontProtusion"
 			"FontEncoding" "RightMarginKerning" "LeftMarginKerning"
@@ -48,9 +48,10 @@
 			"inputencoding" "linenumbermode" "ligaturedisolvechar"
 			"imagereuse" "imageencoding")
 
-    
+(define-string-constant ("image-encoding-type") "hex")
 
 (define-string-constant ("image-file") "mask" "masked")
+
 (define-string-constant ("image-file-type") "png" "jpeg" "gif" "tiff" "bmp" "eps")
 
 (define-string-constant ("image-type") "raw" "eps")
@@ -60,10 +61,13 @@
 (define-string-constant ("shading-opt") "extend0" "extend0" "r0" "r1")
 
 (alexandria:define-constant +ps-linecap-butt+ PS_LINECAP_BUTT :test #'=)
+
 (alexandria:define-constant +ps-linecap-round+ PS_LINECAP_ROUND :test #'=)
 
 (alexandria:define-constant +ps_linejoin_miter+ PS_LINEJOIN_MITER :test #'=)
+
 (alexandria:define-constant +ps_linejoin_round+ PS_LINEJOIN_ROUND :test #'=)
+
 (alexandria:define-constant +ps_linejoin_bevel+ PS_LINEJOIN_BEVEL :test #'=)
 
 (define-string-constant ("link-border-style") "solid" "dashed")
@@ -80,3 +84,5 @@
 (define-string-constant ("boxed-text-feature") "blind")
 
 (define-string-constant ("boxed-text-h-mode") "justify" "fulljustify" "right" "left" "center")
+
+(define-string-constant ("boxed-text-value") "boxheight")
