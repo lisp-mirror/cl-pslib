@@ -8,7 +8,7 @@
 
 (asdf:defsystem #:cl-pslib
   :author "cage <cage@katamail.com>"
-  :description "A CFFI wrapper for the pslib library."
+  :description "A CFFI wrapper for the pslib library, a library for generating PostScript files."
   :licence "LLGPL"
   :maintainer "cage <cage@katamail.com>"
   :version "0.0.1"

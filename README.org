@@ -2,7 +2,7 @@
 
 Cl-pslib is a (thin) wrapper around
 [[http://pslib.sourceforge.net/][pslib]] a library for generating
-PosScript files.
+PostScript files.
 
 * The wrapper
 Cl-pslib use CFFI and SWIG to interface with foreign (non lisp)
