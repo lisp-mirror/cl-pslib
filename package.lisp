@@ -13,71 +13,71 @@
    :page-size
    :width
    :height
-   :+a0-paper-width+ 
-   :+a0-paper-height+ 
-   :+a1-paper-width+ 
-   :+a1-paper-height+ 
-   :+a2-paper-width+ 
-   :+a2-paper-height+ 
-   :+a3-paper-width+ 
-   :+a3-paper-height+ 
-   :+a4-paper-width+ 
-   :+a4-paper-height+ 
-   :+a5-paper-width+ 
-   :+a5-paper-height+ 
-   :+a6-paper-width+ 
-   :+a6-paper-height+ 
-   :+a7-paper-width+ 
-   :+a7-paper-height+ 
-   :+a8-paper-width+ 
-   :+a8-paper-height+ 
-   :+a9-paper-width+ 
-   :+a9-paper-height+ 
-   :+a10-paper-width+ 
+   :+a0-paper-width+
+   :+a0-paper-height+
+   :+a1-paper-width+
+   :+a1-paper-height+
+   :+a2-paper-width+
+   :+a2-paper-height+
+   :+a3-paper-width+
+   :+a3-paper-height+
+   :+a4-paper-width+
+   :+a4-paper-height+
+   :+a5-paper-width+
+   :+a5-paper-height+
+   :+a6-paper-width+
+   :+a6-paper-height+
+   :+a7-paper-width+
+   :+a7-paper-height+
+   :+a8-paper-width+
+   :+a8-paper-height+
+   :+a9-paper-width+
+   :+a9-paper-height+
+   :+a10-paper-width+
    :+a10-paper-height+
-   :+b0-paper-width+ 
-   :+b0-paper-height+ 
-   :+b1-paper-width+ 
-   :+b1-paper-height+ 
-   :+b2-paper-width+ 
-   :+b2-paper-height+ 
-   :+b3-paper-width+ 
-   :+b3-paper-height+ 
-   :+b4-paper-width+ 
-   :+b4-paper-height+ 
-   :+b5-paper-width+ 
-   :+b5-paper-height+ 
-   :+b6-paper-width+ 
-   :+b6-paper-height+ 
-   :+b7-paper-width+ 
-   :+b7-paper-height+ 
-   :+b8-paper-width+ 
-   :+b8-paper-height+ 
-   :+b9-paper-width+ 
-   :+b9-paper-height+ 
-   :+b10-paper-width+ 
+   :+b0-paper-width+
+   :+b0-paper-height+
+   :+b1-paper-width+
+   :+b1-paper-height+
+   :+b2-paper-width+
+   :+b2-paper-height+
+   :+b3-paper-width+
+   :+b3-paper-height+
+   :+b4-paper-width+
+   :+b4-paper-height+
+   :+b5-paper-width+
+   :+b5-paper-height+
+   :+b6-paper-width+
+   :+b6-paper-height+
+   :+b7-paper-width+
+   :+b7-paper-height+
+   :+b8-paper-width+
+   :+b8-paper-height+
+   :+b9-paper-width+
+   :+b9-paper-height+
+   :+b10-paper-width+
    :+b10-paper-height+
-   :+c0-paper-width+ 
-   :+c0-paper-height+ 
-   :+c1-paper-width+ 
-   :+c1-paper-height+ 
-   :+c2-paper-width+ 
-   :+c2-paper-height+ 
-   :+c3-paper-width+ 
-   :+c3-paper-height+ 
-   :+c4-paper-width+ 
-   :+c4-paper-height+ 
-   :+c5-paper-width+ 
-   :+c5-paper-height+ 
-   :+c6-paper-width+ 
-   :+c6-paper-height+ 
-   :+c7-paper-width+ 
-   :+c7-paper-height+ 
-   :+c8-paper-width+ 
-   :+c8-paper-height+ 
-   :+c9-paper-width+ 
-   :+c9-paper-height+ 
-   :+c10-paper-width+ 
+   :+c0-paper-width+
+   :+c0-paper-height+
+   :+c1-paper-width+
+   :+c1-paper-height+
+   :+c2-paper-width+
+   :+c2-paper-height+
+   :+c3-paper-width+
+   :+c3-paper-height+
+   :+c4-paper-width+
+   :+c4-paper-height+
+   :+c5-paper-width+
+   :+c5-paper-height+
+   :+c6-paper-width+
+   :+c6-paper-height+
+   :+c7-paper-width+
+   :+c7-paper-height+
+   :+c8-paper-width+
+   :+c8-paper-height+
+   :+c9-paper-width+
+   :+c9-paper-height+
+   :+c10-paper-width+
    :+c10-paper-height+
 
    :+a0-page-size+
@@ -92,10 +92,11 @@
    :+a9-page-size+
    :+a10-page-size+
 
+   :page-size-equal-p
 
    :millimiter->centimeter
    :millimiter->inch
-   :millimiter->point 
+   :millimiter->point
    :centimeter->millimeter
    :centimeter->inch
    :centimeter->point
@@ -106,30 +107,30 @@
    :point->centimeter
    :point->inch
 
-   :aabb->rect 
-   :rect->aabb 
-   :inside-aabb-p 
+   :aabb->rect
+   :rect->aabb
+   :inside-aabb-p
    :line-eqn
-   :recursive-bezier 
-   :2d-vector-map 
-   :2d-vector-list-map 
-   :2d-vector-list-scale 
-   :2d-vector-list-translate 
-   :2d-vector-list-rotate 
-   :2d-vector-sum 
-   :2d-vector-diff 
-   :2d-vector-dot-product 
-   :2d-vector-cross-product 
-   :2d-vector-scale 
-   :2d-vector-translate 
-   :2d-vector-magn 
-   :2d-vector-normalize 
-   :2d-vector-angle 
-   :2d-vector-rotate 
-   :xy->pair 
-   :pair->interleaved-xy 
-   :xy->interleaved-xy 
-   :interleaved-xy->pair 
+   :recursive-bezier
+   :2d-vector-map
+   :2d-vector-list-map
+   :2d-vector-list-scale
+   :2d-vector-list-translate
+   :2d-vector-list-rotate
+   :2d-vector-sum
+   :2d-vector-diff
+   :2d-vector-dot-product
+   :2d-vector-cross-product
+   :2d-vector-scale
+   :2d-vector-translate
+   :2d-vector-magn
+   :2d-vector-normalize
+   :2d-vector-angle
+   :2d-vector-rotate
+   :xy->pair
+   :pair->interleaved-xy
+   :xy->interleaved-xy
+   :interleaved-xy->pair
 
 
    :pslib_errornum<0
@@ -147,14 +148,14 @@
 
    :+true+
    :+false+
-   :+local-link-fitpage+ 
-   :+local-link-fitwidth+ 
+   :+local-link-fitpage+
+   :+local-link-fitwidth+
    :+local-link-fitheight+
-   :+local-link-fitbbox+ 
-   :+pdf-link-fitpage+ 
-   :+pdf-link-fitwidth+ 
+   :+local-link-fitbbox+
+   :+pdf-link-fitpage+
+   :+pdf-link-fitwidth+
    :+pdf-link-fitheight+
-   :+pdf-link-fitbbox+ 
+   :+pdf-link-fitbbox+
    :+pattern-paint-type1+
    :+pattern-paint-type2+
    :+find-font-encoding-builtin+
@@ -304,7 +305,7 @@
    :get-parameter
    :get-value
    :glyph-show
-   :include-file 
+   :include-file
    :lineto
    :moveto
    :makespotcolor
@@ -343,5 +344,3 @@
    :translate
    :curve-to
    :bezier-to))
-
-   
