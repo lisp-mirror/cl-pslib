@@ -492,7 +492,9 @@
       (if (<= image-id 0)
 	  (error 'image-load-error
 		 :text (format nil "File ~a is not a valid image file of type ~a" file-name type))
-	 image-id))))
+	  (values image-id
+		  (get-value object +value-key-imagewidth+  image-id)
+		  (get-value object +value-key-imageheight+ image-id))))))
 
 (defmethod open-image ((object psdoc) (type string)
 		       (source string) (data list)
