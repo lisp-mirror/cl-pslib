@@ -513,7 +513,7 @@
 
 (defmethod place-image ((object psdoc) (image-id integer) (x number) (y number) (scale number))
   (with-psdoc-ptr (ptr) object
-    (ps_place_image ptr image-id (co-sf x) (co-sf y) (co-sf scale))))
+    (ps_place_image ptr image-id (conv-mt x) (conv-mt y) (co-sf scale))))
 
 (defmethod rotate ((object psdoc) (rot number))
   (with-psdoc-ptr (ptr) object
@@ -629,7 +629,7 @@
      (ps_show_boxed ptr text (conv-mt left) (conv-mt top) (conv-mt width)
 		    (conv-mt height) h-mode feature)
      (get-value object +value-key-boxheight+))))
-	
+
 (defmethod show-xy ((object psdoc) (text string) (x number) (y number) &optional (x-len 0))
   (with-psdoc-ptr (ptr) object
     (if (> 0 x-len)
@@ -652,22 +652,22 @@
 
 (defmethod print-object ((object text-metrics) stream)
   (print-unreadable-object (object stream :type t :identity t)
-    (format stream "metrics w: ~a h: ~a ascent: ~s descent: ~a" 
+    (format stream "metrics w: ~a h: ~a ascent: ~s descent: ~a"
 	    (width object) (height object) (ascent object) (descent object))))
 
-(defmethod string-geometry ((object psdoc) (text string) (size number) (font-id integer) 
+(defmethod string-geometry ((object psdoc) (text string) (size number) (font-id integer)
 			    &key (end (length text)))
   (with-psdoc-ptr (ptr) object
-    (with-list->foreign-array (data-arr :float #'identity) 
+    (with-list->foreign-array (data-arr :float #'identity)
 	(map-into (make-list 3) #'(lambda() (float 0)))
       (ps_string_geometry ptr text end font-id size data-arr)
       (let ((metrics-list '()))
-	(setf metrics-list 
+	(setf metrics-list
 	      (dotimes (i 3 (reverse metrics-list))
-		(push (point->millimeter (cffi:mem-aref data-arr :float i)) 
+		(push (point->millimeter (cffi:mem-aref data-arr :float i))
 		      metrics-list)))
-	(make-instance 'text-metrics 
-		       :width (first metrics-list) 
+	(make-instance 'text-metrics
+		       :width (first metrics-list)
 		       :height size
 		       :ascent (third metrics-list)
 		       :descent (second metrics-list))))))
@@ -676,12 +676,12 @@
   (with-psdoc-ptr (ptr) object
     (ps_symbol ptr char)))
 
-(defmethod font-symbol-name ((object psdoc) (idx integer) (name string) 
+(defmethod font-symbol-name ((object psdoc) (idx integer) (name string)
 			 &optional (font-id 0) (size (length name)))
   (with-psdoc-ptr (ptr) object
     (ps_symbol_name ptr idx font-id name size)))
 
-(defmethod font-symbol-width ((object psdoc) (idx integer)  
+(defmethod font-symbol-width ((object psdoc) (idx integer)
 			 &optional (font-id 0) (size 0.0))
   (with-psdoc-ptr (ptr) object
     (ps_symbol_width ptr idx font-id size)))
@@ -691,11 +691,11 @@
     (ps_translate ptr (conv-mt x) (conv-mt y))))
 
 (defmethod curve-to ((object psdoc) p1 p2 p3)
-  (curveto object 
+  (curveto object
 	   (conv-mt (first p1)) (conv-mt (second p1))
 	   (conv-mt (first p2)) (conv-mt (second p2))
 	   (conv-mt (first p3)) (conv-mt (second p3))))
-	   
+
 (defmethod bezier-to (object p1 p2 p3 p4 &key (threshold 0.1))
   (let* ((ct-pts (mapcar #'(lambda (p) (list (conv-mt (first p)) (conv-mt (second p))))
 			 (list p1 p2 p3 p4)))
