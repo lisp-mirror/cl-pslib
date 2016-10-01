@@ -7,15 +7,20 @@
 
 (in-package #:cl-pslib)
 
-(defparameter *is-ps-boot-called* nil)
+(defparameter *is-ps-boot-called*          nil)
 
-(defparameter *conversion-metrics* #'millimiter->point)
+(defparameter *conversion-metrics*         #'millimiter->point)
+
+(defparameter *conversion-metrics-inverse* #'point->millimeter)
 
 (defmacro co-sf (val)
   `(coerce ,val 'single-float))
 
 (defmacro conv-mt (val)
   `(funcall *conversion-metrics* (co-sf ,val)))
+
+(defmacro conv-mt-inv (val)
+  `(funcall *conversion-metrics-inverse* (co-sf ,val)))
 
 (defclass psdoc ()
   ((psdoc-pointer
@@ -493,8 +498,8 @@
 	  (error 'image-load-error
 		 :text (format nil "File ~a is not a valid image file of type ~a" file-name type))
 	  (values image-id
-		  (get-value object +value-key-imagewidth+  image-id)
-		  (get-value object +value-key-imageheight+ image-id))))))
+		  (conv-mt-inv (get-value object +value-key-imagewidth+  image-id))
+		  (conv-mt-inv (get-value object +value-key-imageheight+ image-id)))))))
 
 (defmethod open-image ((object psdoc) (type string)
 		       (source string) (data list)
@@ -630,7 +635,7 @@
     (values
      (ps_show_boxed ptr text (conv-mt left) (conv-mt top) (conv-mt width)
 		    (conv-mt height) h-mode feature)
-     (get-value object +value-key-boxheight+))))
+     (conv-mt-inv (get-value object +value-key-boxheight+)))))
 
 (defmethod show-xy ((object psdoc) (text string) (x number) (y number) &optional (x-len 0))
   (with-psdoc-ptr (ptr) object
