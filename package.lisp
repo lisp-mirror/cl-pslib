@@ -343,4 +343,6 @@
    :font-symbol-width
    :translate
    :curve-to
-   :bezier-to))
+   :bezier-to
+   :accomodate-text
+   :draw-text-confined-in-box))

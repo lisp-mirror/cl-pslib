@@ -213,6 +213,16 @@
 
 (defgeneric bezier-to (object p1 p2 p3 p4 &key threshold))
 
+(defgeneric accomodate-text (object font text box-h box-w
+			     &optional
+			       starting-font-size
+			       horizontal-align))
+
+(defgeneric draw-text-confined-in-box (object font text left top width height
+				       &key
+					 maximum-font-size
+					 horizontal-align))
+
 (defun shutdown ()
   (ps_shutdown))
 
@@ -709,3 +719,72 @@
 	 (pairs (recursive-bezier ct-pts :threshold threshold)))
     (format t "~a~%" pairs)
     (mapcar #'(lambda (p) (lineto object (first p) (second p))) pairs)))
+
+(defmethod accomodate-text ((object psdoc) font text box-h box-w
+			    &optional
+			      (starting-font-size 20.0)
+			      (horizontal-align +boxed-text-h-mode-center+))
+  (ps:setfont object font starting-font-size)
+  (let ((measures (multiple-value-list
+		   (ps:show-boxed object
+				  text
+				  0
+				  0
+				  box-w
+				  0
+				  horizontal-align
+				  +boxed-text-feature-blind+))))
+
+    (if (<= (second measures) ;; height
+	    box-h)
+	(values (second measures) starting-font-size)
+	(accomodate-text object font text box-h box-w (- starting-font-size .1)))))
+
+(defmethod draw-text-confined-in-box ((object psdoc) (font string) (text string)
+				      (left number) (top number)
+				      (width number) (height number)
+				      &key
+					(maximum-font-size 20.0)
+					(vertical-align :center)
+					(horizontal-align +boxed-text-h-mode-center+))
+  (let* ((font-handle (ps:findfont object font "" t)))
+    (draw-text-confined-in-box object
+			       font-handle
+			       text
+			       left
+			       top
+			       width
+			       height
+			       :maximum-font-size maximum-font-size
+			       :vertical-align    vertical-align
+			       :horizontal-align  horizontal-align)))
+
+(defmethod draw-text-confined-in-box ((object psdoc) font (text string)
+				      (left number) (top number)
+				      (width number) (height number)
+				      &key
+					(maximum-font-size 20.0)
+					(vertical-align :center)
+					(horizontal-align +boxed-text-h-mode-center+))
+  (ps:save object)
+  (ps:set-parameter object ps:+value-key-linebreak+ ps:+true+)
+  (multiple-value-bind (text-h actual-font-size)
+      (accomodate-text object font text height width maximum-font-size
+		       horizontal-align)
+    (ps:setfont object font actual-font-size)
+    (let ((y (ecase vertical-align
+	       (:center
+		(+ top (- (/ height 2) (/ text-h 2))))
+	       (:bottom
+		top)
+	       (:top
+		(- (+ top height) text-h)))))
+      (ps:show-boxed object
+		     text
+		     left
+		     y
+		     width
+		     text-h
+		     horizontal-align
+		     ""))
+    (ps:restore object)))
