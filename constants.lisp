@@ -9,11 +9,11 @@
 
 (defmacro define-string-constant ((prefix) &rest names)
   `(progn
-     ,@(mapcar #'(lambda (cn) 
-		   `(alexandria:define-constant
-			,(alexandria:format-symbol t "+~:@(~a-~a~)+" prefix cn)
-			,cn :test #'string=))
-	       names)))
+     ,@(mapcar #'(lambda (cn)
+                   `(alexandria:define-constant
+                        ,(alexandria:format-symbol t "+~:@(~a-~a~)+" prefix cn)
+                        ,cn :test #'string=))
+               names)))
 
 
 (alexandria:define-constant +true+ "true" :test #'string=)
@@ -31,22 +31,22 @@
 
 
 (define-string-constant ("value-key") "fontsize" "font" "imagewidth" "imageheight"
-			"capheight" "ascender" "descender"
-			"italicangle" "underlineposition" "underlinethickness"
-			"textx" "texty" "textrendering" "wordspacing"
-			"major" "minor" "subminor" "revision"
-			"charspacing" "hyphenminchars" "separationcolor"
-			"textrise" "leading" "hyphenminchars"
-			"parindent" "numindentlines" "parskip"
-			"parindentskip" "linenumberspace" "linenumbersep"
-			"boxheight" "linebreak")
+                        "capheight" "ascender" "descender"
+                        "italicangle" "underlineposition" "underlinethickness"
+                        "textx" "texty" "textrendering" "wordspacing"
+                        "major" "minor" "subminor" "revision"
+                        "charspacing" "hyphenminchars" "separationcolor"
+                        "textrise" "leading" "hyphenminchars"
+                        "parindent" "numindentlines" "parskip"
+                        "parindentskip" "linenumberspace" "linenumbersep"
+                        "boxheight" "linebreak")
 
 (define-string-constant ("parameter-key") "FontAFM" "FontOutline" "FontProtusion"
-			"FontEncoding" "RightMarginKerning" "LeftMarginKerning"
-			"RightMarginKerning" "LeftMarginKerning" "SearchPath"
-			"underline" "overline" "strikeout" "warning" "hyphendict"
-			"inputencoding" "linenumbermode" "ligaturedisolvechar"
-			"imagereuse" "imageencoding")
+                        "FontEncoding" "RightMarginKerning" "LeftMarginKerning"
+                        "RightMarginKerning" "LeftMarginKerning" "SearchPath"
+                        "underline" "overline" "strikeout" "warning" "hyphendict"
+                        "inputencoding" "linenumbermode" "ligaturedisolvechar"
+                        "imagereuse" "imageencoding")
 
 (define-string-constant ("image-encoding-type") "hex")
 
@@ -72,8 +72,8 @@
 
 (define-string-constant ("link-border-style") "solid" "dashed")
 
-(define-string-constant ("ps-comment-key") "Keywords" "Subject" "Title" 
-			"Creator" "Author" "BoundingBox" "Orientation")
+(define-string-constant ("ps-comment-key") "Keywords" "Subject" "Title"
+                        "Creator" "Author" "BoundingBox" "Orientation")
 
 (define-string-constant ("color-type") "fill" "stroke" "fillstroke")
 

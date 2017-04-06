@@ -10,34 +10,34 @@
 (defmacro defcond (type)
   `(define-condition ,(alexandria:format-symbol t "TEXT-~a" (string-upcase type))
        (,type)
-       ((text 
-	 :initarg :text 
-	 :reader text))
+       ((text
+         :initarg :text
+         :reader text))
      (:documentation "Error that set text")))
 
 
 (defcond error)
 (defcond warning)
 
-(define-condition bookmark-error (text-error) 
+(define-condition bookmark-error (text-error)
   ()
-  (:report (lambda (condition stream) 
-	    (format stream "~a" (text condition)))))
+  (:report (lambda (condition stream)
+            (format stream "~a" (text condition)))))
 
-(define-condition spotcolor-error (text-error) 
+(define-condition spotcolor-error (text-error)
   ()
-  (:report (lambda (condition stream) 
-	    (format stream "~a" (text condition)))))
+  (:report (lambda (condition stream)
+            (format stream "~a" (text condition)))))
 
-(define-condition image-load-error (text-error) 
+(define-condition image-load-error (text-error)
   ()
-  (:report (lambda (condition stream) 
-	    (format stream "~a" (text condition)))))
+  (:report (lambda (condition stream)
+            (format stream "~a" (text condition)))))
 
-(define-condition shading-pattern-error (text-error) 
+(define-condition shading-pattern-error (text-error)
   ()
-  (:report (lambda (condition stream) 
-	    (format stream "~a" (text condition)))))
+  (:report (lambda (condition stream)
+            (format stream "~a" (text condition)))))
 
 
 (define-condition not-implemented-error (text-error)
@@ -51,9 +51,9 @@
 
 (define-condition out-of-bounds (error)
   ((seq
-    :initarg :seq 
+    :initarg :seq
     :reader seq)
    (idx
-    :initarg :idx 
+    :initarg :idx
     :reader idx))
    (:documentation "Error when you go out of bound"))

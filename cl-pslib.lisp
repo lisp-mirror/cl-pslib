@@ -214,14 +214,14 @@
 (defgeneric bezier-to (object p1 p2 p3 p4 &key threshold))
 
 (defgeneric accomodate-text (object font text box-h box-w
-			     &optional
-			       starting-font-size
-			       horizontal-align))
+                             &optional
+                               starting-font-size
+                               horizontal-align))
 
 (defgeneric draw-text-confined-in-box (object font text left top width height
-				       &key
-					 maximum-font-size
-					 horizontal-align))
+                                       &key
+                                         maximum-font-size
+                                         horizontal-align))
 
 (defun shutdown ()
   (ps_shutdown))
@@ -235,10 +235,10 @@
 (defmacro define-only-psdoc-method (lispname)
   `(progn
      ,@(mapcar #'(lambda (name)
-		   `(defmethod ,(alexandria:format-symbol t "~@:(~a~)" name) ((object psdoc))
-		      (with-psdoc-ptr (ptr) object
-			(,(alexandria:format-symbol t "PS_~a" (cl-ppcre:regex-replace-all "-" (symbol-name name) "_")) ptr))))
-	       lispname)))
+                   `(defmethod ,(alexandria:format-symbol t "~@:(~a~)" name) ((object psdoc))
+                      (with-psdoc-ptr (ptr) object
+                        (,(alexandria:format-symbol t "PS_~a" (cl-ppcre:regex-replace-all "-" (symbol-name name) "_")) ptr))))
+               lispname)))
 
 (defmacro with-psdoc-ptr ((ptr) object &body body)
   `(with-accessors ((,ptr psdoc-pointer)) ,object
@@ -251,13 +251,13 @@
 
 (defmethod open-doc ((object psdoc) (file string))
   (with-accessors ((filename filename)
-		   (ptr psdoc-pointer)) object
+                   (ptr psdoc-pointer)) object
     (setf filename file)
     (pslib_errornum<0 (ps_open_file ptr file))))
 
 (defmethod open-doc ((object psdoc) (file (eql nil))) ; open doc in memory
   (with-accessors ((ptr psdoc-pointer)
-		   (writeproc writeproc)) object
+                   (writeproc writeproc)) object
     (pslib_errornum<0 (ps_open_mem ptr writeproc))))
 
 (defmethod close-doc ((object psdoc))
@@ -266,10 +266,10 @@
 
 (defmethod begin-page ((object psdoc))
   (with-accessors ((ptr psdoc-pointer)
-		   (page-size page-size)) object
+                   (page-size page-size)) object
     (ps_begin_page ptr
-		   (millimiter->point (width page-size))
-		   (millimiter->point (height page-size)))))
+                   (millimiter->point (width page-size))
+                   (millimiter->point (height page-size)))))
 
 (defmethod end-page ((object psdoc))
   (with-psdoc-ptr (ptr) object
@@ -323,113 +323,113 @@
   (with-psdoc-ptr (ptr) object
     (let ((bookmark-id (ps_add_bookmark ptr text parent (truth-lisp->c open))))
       (if (<= bookmark-id 0)
-	  (error 'bookmark-error
-		 :text (format nil "Can not set bookmark for ~a (parent ~a)"
-			       text parent))
-	  bookmark-id))))
+          (error 'bookmark-error
+                 :text (format nil "Can not set bookmark for ~a (parent ~a)"
+                               text parent))
+          bookmark-id))))
 
 (defmethod add-kerning ((object psdoc) (font-id integer)
-			(glyph-name1 string) (glyph-name2 string) (kern integer))
+                        (glyph-name1 string) (glyph-name2 string) (kern integer))
   (with-psdoc-ptr (ptr) object
     (ps_add_kerning ptr font-id glyph-name1 glyph-name2 kern)))
 
 (defmethod add-launchlink ((object psdoc)
-			    (llx number) (lly number)
-			    (urx number) (ury number) (file-name string))
+                            (llx number) (lly number)
+                            (urx number) (ury number) (file-name string))
   (with-psdoc-ptr (ptr) object
     (ps_add_launchlink ptr (conv-mt llx) (conv-mt lly)
-		       (conv-mt urx) (conv-mt ury) file-name)))
+                       (conv-mt urx) (conv-mt ury) file-name)))
 
 (defmethod add-ligature ((object psdoc) (font-id integer)
-			 (glyph-name1 string) (glyph-name2 string) (glyph-name3 string))
+                         (glyph-name1 string) (glyph-name2 string) (glyph-name3 string))
   (with-psdoc-ptr (ptr) object
     (ps_add_ligature ptr font-id glyph-name1 glyph-name2 glyph-name3)))
 
 (defmethod add-locallink ((object psdoc)
-			   (llx number) (lly number)
-			   (urx number) (ury number)
-			   (page integer) (dest string))
+                           (llx number) (lly number)
+                           (urx number) (ury number)
+                           (page integer) (dest string))
   (with-psdoc-ptr (ptr) object
     (ps_add_locallink ptr
-		      (conv-mt llx) (conv-mt lly)
-		      (conv-mt urx) (conv-mt ury) page dest)))
+                      (conv-mt llx) (conv-mt lly)
+                      (conv-mt urx) (conv-mt ury) page dest)))
 
 (defmethod add-note ((object psdoc)
-		     (llx number) (lly number)
-		     (urx number) (ury number)
-		     (contents string)
-		     (title string)
-		     (icon string) open)
+                     (llx number) (lly number)
+                     (urx number) (ury number)
+                     (contents string)
+                     (title string)
+                     (icon string) open)
   (with-psdoc-ptr (ptr) object
     (ps_add_note ptr
-		 (conv-mt llx) (conv-mt lly)
-		 (conv-mt urx) (conv-mt ury)
-		 contents title icon
-		 (truth-lisp->c open))))
+                 (conv-mt llx) (conv-mt lly)
+                 (conv-mt urx) (conv-mt ury)
+                 contents title icon
+                 (truth-lisp->c open))))
 
 (defmethod add-pdflink ((object psdoc)
-			(llx number) (lly number)
-			(urx number) (ury number)
-			(file-name string)
-			(page integer) (dest string))
+                        (llx number) (lly number)
+                        (urx number) (ury number)
+                        (file-name string)
+                        (page integer) (dest string))
   (with-psdoc-ptr (ptr) object
     (ps_add_pdflink ptr
-		    (conv-mt llx) (conv-mt lly)
-		    (conv-mt urx) (conv-mt ury)
-		    file-name page dest)))
+                    (conv-mt llx) (conv-mt lly)
+                    (conv-mt urx) (conv-mt ury)
+                    file-name page dest)))
 
 (defmethod add-weblink ((object psdoc)
-			 (llx number) (lly number)
-			 (urx number) (ury number)
-			 (url string))
+                         (llx number) (lly number)
+                         (urx number) (ury number)
+                         (url string))
   (with-psdoc-ptr (ptr) object
     (ps_add_weblink ptr
-		    (conv-mt llx) (conv-mt lly)
-		    (conv-mt urx) (conv-mt ury)
-		    url)))
+                    (conv-mt llx) (conv-mt lly)
+                    (conv-mt urx) (conv-mt ury)
+                    url)))
 
 (defmethod begin-font ((object psdoc)
-			(font-name string)
-			(reserved integer)
-			(a number)
-			(b number)
-			(c number)
-			(d number)
-			(e number)
-			(f number) (opt-list string))
+                        (font-name string)
+                        (reserved integer)
+                        (a number)
+                        (b number)
+                        (c number)
+                        (d number)
+                        (e number)
+                        (f number) (opt-list string))
   (with-psdoc-ptr (ptr) object
     (ps_begin_font ptr font-name reserved
-		   (co-sf a)
-		   (co-sf b) (co-sf c)
-		   (co-sf d) (co-sf e) (co-sf f) opt-list)))
+                   (co-sf a)
+                   (co-sf b) (co-sf c)
+                   (co-sf d) (co-sf e) (co-sf f) opt-list)))
 
 (defmethod begin-glyph ((object psdoc)
-			(glyph-name string)
-			(wx number)
-			(llx number)
-			(lly number)
-			(urx number)
-			(ury number))
+                        (glyph-name string)
+                        (wx number)
+                        (llx number)
+                        (lly number)
+                        (urx number)
+                        (ury number))
   (with-psdoc-ptr (ptr) object
     (ps_begin_glyph ptr glyph-name (conv-mt wx)
-		    (conv-mt llx)
-		    (conv-mt lly)
-		    (conv-mt urx)
-		    (conv-mt ury))))
+                    (conv-mt llx)
+                    (conv-mt lly)
+                    (conv-mt urx)
+                    (conv-mt ury))))
 
 (defmethod begin-pattern ((object psdoc)
-			  (width number)
-			  (height number)
-			  (xstep number)
-			  (ystep number)
-			  (paint-type integer))
+                          (width number)
+                          (height number)
+                          (xstep number)
+                          (ystep number)
+                          (paint-type integer))
   (with-psdoc-ptr (ptr) object
     (pslib_errornum<0 (ps_begin_pattern ptr
-					(conv-mt width)
-					(conv-mt height)
-					(conv-mt xstep)
-					(conv-mt ystep)
-					paint-type))))
+                                        (conv-mt width)
+                                        (conv-mt height)
+                                        (conv-mt xstep)
+                                        (conv-mt ystep)
+                                        paint-type))))
 
 (defmethod begin-template ((object psdoc) (width number) (height number))
   (with-psdoc-ptr (ptr) object
@@ -497,36 +497,36 @@
   (with-psdoc-ptr (ptr) object
     (let ((color-id (ps_makespotcolor ptr name reserved)))
       (if (<= color-id 0)
-	  (error 'spotcolor-error
-		 :text (format nil "Can not set spot color with name ~a" name))
-	  color-id))))
+          (error 'spotcolor-error
+                 :text (format nil "Can not set spot color with name ~a" name))
+          color-id))))
 
 (defmethod open-image-file ((object psdoc) (type string) (file-name string) (param string) (int-param integer))
   (with-psdoc-ptr (ptr) object
     (let ((image-id (ps_open_image_file ptr type file-name param int-param)))
       (if (<= image-id 0)
-	  (error 'image-load-error
-		 :text (format nil "File ~a is not a valid image file of type ~a" file-name type))
-	  (values image-id
-		  (conv-mt-inv (get-value object +value-key-imagewidth+  image-id))
-		  (conv-mt-inv (get-value object +value-key-imageheight+ image-id)))))))
+          (error 'image-load-error
+                 :text (format nil "File ~a is not a valid image file of type ~a" file-name type))
+          (values image-id
+                  (conv-mt-inv (get-value object +value-key-imagewidth+  image-id))
+                  (conv-mt-inv (get-value object +value-key-imageheight+ image-id)))))))
 
 (defmethod open-image ((object psdoc) (type string)
-		       (source string) (data list)
-		       (length integer) (width integer)
-		       (height integer)
-		       (components integer)
-		       (bpc integer)
-		       (params string))
+                       (source string) (data list)
+                       (length integer) (width integer)
+                       (height integer)
+                       (components integer)
+                       (bpc integer)
+                       (params string))
     (with-psdoc-ptr (ptr) object
       (with-list->foreign-array (data-arr :char #'identity) data
-	  (let ((image-id (ps_open_image ptr type source data-arr length
-					 width height components bpc params)))
+          (let ((image-id (ps_open_image ptr type source data-arr length
+                                         width height components bpc params)))
 
-	    (if (<= image-id 0)
-		(error 'image-load-error
-		       :text (format nil "Load of image from memory failed"))
-		image-id)))))
+            (if (<= image-id 0)
+                (error 'image-load-error
+                       :text (format nil "Load of image from memory failed"))
+                image-id)))))
 
 (defmethod place-image ((object psdoc) (image-id integer) (x number) (y number) (scale number))
   (with-psdoc-ptr (ptr) object
@@ -569,19 +569,19 @@
     (ps_set_value ptr key (co-sf val))))
 
 (defmethod setcolor ((object psdoc) (type string)  (color-space string)
-		     &optional (c1 0.0) (c2 0.0) (c3 0.0) (c4 0.0))
+                     &optional (c1 0.0) (c2 0.0) (c3 0.0) (c4 0.0))
   (with-psdoc-ptr (ptr) object
     (ps_setcolor ptr type color-space (co-sf c1) (co-sf c2) (co-sf c3) (co-sf c4))))
 
 (defmethod setcolor ((object psdoc) (type string) (color cl-colors:rgb)
-		     &optional c1 c2 c3 c4)
+                     &optional c1 c2 c3 c4)
   (declare (ignore c1 c2 c3 c4))
   (with-psdoc-ptr (ptr) object
     (ps_setcolor ptr type +color-space-rgb+
-		 (co-sf (cl-colors:rgb-red color))
-		 (co-sf (cl-colors:rgb-green color))
-		 (co-sf (cl-colors:rgb-blue color))
-		 1.0)))
+                 (co-sf (cl-colors:rgb-red color))
+                 (co-sf (cl-colors:rgb-green color))
+                 (co-sf (cl-colors:rgb-blue color))
+                 1.0)))
 
 (defmethod setflat ((object psdoc) (val number))
   (assert (<= 0.2 val 100)) ;; according to sources
@@ -623,9 +623,9 @@
   (with-psdoc-ptr (ptr) object
     (let ((sh-pattern-id (ps_shading_pattern ptr shading-id option-list)))
       (if (<= sh-pattern-id 0)
-	  (error 'shading-pattern-error
-		 :text (format nil "Shading pattern from shading-id: ~a failed." shading-id))
-	  sh-pattern-id))))
+          (error 'shading-pattern-error
+                 :text (format nil "Shading pattern from shading-id: ~a failed." shading-id))
+          sh-pattern-id))))
 
 (defmethod shfill ((object psdoc) (shading-id integer))
   (with-psdoc-ptr (ptr) object
@@ -634,24 +634,24 @@
 (defmethod show ((object psdoc) (text string) &optional (x-len 0))
   (with-psdoc-ptr (ptr) object
     (if (> 0 x-len)
-	(ps_show2 ptr text (round (conv-mt x-len)))
-	(ps_show ptr text))))
+        (ps_show2 ptr text (round (conv-mt x-len)))
+        (ps_show ptr text))))
 
 (defmethod show-boxed ((object psdoc) (text string)
-		       (left number) (top number)
-		       (width number) (height number)
-		       (h-mode string) (feature string))
+                       (left number) (top number)
+                       (width number) (height number)
+                       (h-mode string) (feature string))
   (with-psdoc-ptr (ptr) object
     (values
      (ps_show_boxed ptr text (conv-mt left) (conv-mt top) (conv-mt width)
-		    (conv-mt height) h-mode feature)
+                    (conv-mt height) h-mode feature)
      (conv-mt-inv (get-value object +value-key-boxheight+)))))
 
 (defmethod show-xy ((object psdoc) (text string) (x number) (y number) &optional (x-len 0))
   (with-psdoc-ptr (ptr) object
     (if (> 0 x-len)
-	(ps_show_xy2 ptr text (round (conv-mt x-len)) (conv-mt x) (conv-mt y))
-	(ps_show_xy ptr text (conv-mt x) (conv-mt y)))))
+        (ps_show_xy2 ptr text (round (conv-mt x-len)) (conv-mt x) (conv-mt y))
+        (ps_show_xy ptr text (conv-mt x) (conv-mt y)))))
 
 (defclass text-metrics ()
   ((width
@@ -670,36 +670,36 @@
 (defmethod print-object ((object text-metrics) stream)
   (print-unreadable-object (object stream :type t :identity t)
     (format stream "metrics w: ~a h: ~a ascent: ~s descent: ~a"
-	    (width object) (height object) (ascent object) (descent object))))
+            (width object) (height object) (ascent object) (descent object))))
 
 (defmethod string-geometry ((object psdoc) (text string) (size number) (font-id integer)
-			    &key (end (length text)))
+                            &key (end (length text)))
   (with-psdoc-ptr (ptr) object
     (with-list->foreign-array (data-arr :float #'identity)
-	(map-into (make-list 3) #'(lambda() (float 0)))
+        (map-into (make-list 3) #'(lambda() (float 0)))
       (ps_string_geometry ptr text end font-id size data-arr)
       (let ((metrics-list '()))
-	(setf metrics-list
-	      (dotimes (i 3 (reverse metrics-list))
-		(push (point->millimeter (cffi:mem-aref data-arr :float i))
-		      metrics-list)))
-	(make-instance 'text-metrics
-		       :width (first metrics-list)
-		       :height size
-		       :ascent (third metrics-list)
-		       :descent (second metrics-list))))))
+        (setf metrics-list
+              (dotimes (i 3 (reverse metrics-list))
+                (push (point->millimeter (cffi:mem-aref data-arr :float i))
+                      metrics-list)))
+        (make-instance 'text-metrics
+                       :width (first metrics-list)
+                       :height size
+                       :ascent (third metrics-list)
+                       :descent (second metrics-list))))))
 
 (defmethod font-symbol ((object psdoc) (char integer))
   (with-psdoc-ptr (ptr) object
     (ps_symbol ptr char)))
 
 (defmethod font-symbol-name ((object psdoc) (idx integer) (name string)
-			 &optional (font-id 0) (size (length name)))
+                         &optional (font-id 0) (size (length name)))
   (with-psdoc-ptr (ptr) object
     (ps_symbol_name ptr idx font-id name size)))
 
 (defmethod font-symbol-width ((object psdoc) (idx integer)
-			 &optional (font-id 0) (size 0.0))
+                         &optional (font-id 0) (size 0.0))
   (with-psdoc-ptr (ptr) object
     (ps_symbol_width ptr idx font-id size)))
 
@@ -709,82 +709,81 @@
 
 (defmethod curve-to ((object psdoc) p1 p2 p3)
   (curveto object
-	   (conv-mt (first p1)) (conv-mt (second p1))
-	   (conv-mt (first p2)) (conv-mt (second p2))
-	   (conv-mt (first p3)) (conv-mt (second p3))))
+           (conv-mt (first p1)) (conv-mt (second p1))
+           (conv-mt (first p2)) (conv-mt (second p2))
+           (conv-mt (first p3)) (conv-mt (second p3))))
 
 (defmethod bezier-to (object p1 p2 p3 p4 &key (threshold 0.1))
   (let* ((ct-pts (mapcar #'(lambda (p) (list (conv-mt (first p)) (conv-mt (second p))))
-			 (list p1 p2 p3 p4)))
-	 (pairs (recursive-bezier ct-pts :threshold threshold)))
+                         (list p1 p2 p3 p4)))
+         (pairs (recursive-bezier ct-pts :threshold threshold)))
     (format t "~a~%" pairs)
     (mapcar #'(lambda (p) (lineto object (first p) (second p))) pairs)))
 
 (defmethod accomodate-text ((object psdoc) font text box-h box-w
-			    &optional
-			      (starting-font-size 20.0)
-			      (horizontal-align +boxed-text-h-mode-center+))
+                            &optional
+                              (starting-font-size 20.0)
+                              (horizontal-align +boxed-text-h-mode-center+))
   (ps:setfont object font starting-font-size)
   (let ((measures (multiple-value-list
-		   (ps:show-boxed object
-				  text
-				  0
-				  0
-				  box-w
-				  0
-				  horizontal-align
-				  +boxed-text-feature-blind+))))
-
+                   (ps:show-boxed object
+                                  text
+                                  0
+                                  0
+                                  box-w
+                                  0
+                                  horizontal-align
+                                  +boxed-text-feature-blind+))))
     (if (<= (second measures) ;; height
-	    box-h)
-	(values (second measures) starting-font-size)
-	(accomodate-text object font text box-h box-w (- starting-font-size .1)))))
+            box-h)
+        (values (second measures) starting-font-size)
+        (accomodate-text object font text box-h box-w (- starting-font-size .1)))))
 
 (defmethod draw-text-confined-in-box ((object psdoc) (font string) (text string)
-				      (left number) (top number)
-				      (width number) (height number)
-				      &key
-					(maximum-font-size 20.0)
-					(vertical-align :center)
-					(horizontal-align +boxed-text-h-mode-center+))
+                                      (left number) (top number)
+                                      (width number) (height number)
+                                      &key
+                                        (maximum-font-size 20.0)
+                                        (vertical-align :center)
+                                        (horizontal-align +boxed-text-h-mode-center+))
   (let* ((font-handle (ps:findfont object font "" t)))
     (draw-text-confined-in-box object
-			       font-handle
-			       text
-			       left
-			       top
-			       width
-			       height
-			       :maximum-font-size maximum-font-size
-			       :vertical-align    vertical-align
-			       :horizontal-align  horizontal-align)))
+                               font-handle
+                               text
+                               left
+                               top
+                               width
+                               height
+                               :maximum-font-size maximum-font-size
+                               :vertical-align    vertical-align
+                               :horizontal-align  horizontal-align)))
 
 (defmethod draw-text-confined-in-box ((object psdoc) font (text string)
-				      (left number) (top number)
-				      (width number) (height number)
-				      &key
-					(maximum-font-size 20.0)
-					(vertical-align :center)
-					(horizontal-align +boxed-text-h-mode-center+))
+                                      (left number) (top number)
+                                      (width number) (height number)
+                                      &key
+                                        (maximum-font-size 20.0)
+                                        (vertical-align :center)
+                                        (horizontal-align +boxed-text-h-mode-center+))
   (ps:save object)
   (ps:set-parameter object ps:+value-key-linebreak+ ps:+true+)
   (multiple-value-bind (text-h actual-font-size)
       (accomodate-text object font text height width maximum-font-size
-		       horizontal-align)
+                       horizontal-align)
     (ps:setfont object font actual-font-size)
     (let ((y (ecase vertical-align
-	       (:center
-		(+ top (- (/ height 2) (/ text-h 2))))
-	       (:bottom
-		top)
-	       (:top
-		(- (+ top height) text-h)))))
+               (:center
+                (+ top (- (/ height 2) (/ text-h 2))))
+               (:bottom
+                top)
+               (:top
+                (- (+ top height) text-h)))))
       (ps:show-boxed object
-		     text
-		     left
-		     y
-		     width
-		     text-h
-		     horizontal-align
-		     ""))
+                     text
+                     left
+                     y
+                     width
+                     text-h
+                     horizontal-align
+                     ""))
     (ps:restore object)))

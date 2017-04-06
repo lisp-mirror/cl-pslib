@@ -7,7 +7,7 @@
 
 (in-package :cl-pslib)
 
- 
+
 (define-foreign-library libps
     (:darwin "libps.dylib")
   (:unix (:or "libps.so.0" "libps.so"))
@@ -24,19 +24,18 @@
 (cffi:defcallback write-to-string size ((doc :pointer) (data :pointer) (size size))
   (declare (ignore doc))
   (setf *callback-string* (concatenate 'string *callback-string*
-				       (foreign-string-to-lisp data :count size)))
+                                       (foreign-string-to-lisp data :count size)))
   size)
 
-(defmacro with-list->foreign-array ((arr type &optional (fun #'identity))
-						lst &body body)
+(defmacro with-list->foreign-array ((arr type &optional (fun #'identity)) lst &body body)
   (alexandria:with-gensyms (ct data)
     `(cffi:with-foreign-object (,arr ,type (length ,lst))
        (let ((,ct 0))
-	 (mapc (lambda (,data)
-		 (setf (mem-aref ,arr ,type ,ct)
-		       (funcall ,fun ,data))
-		 (incf ,ct))
-	       ,lst))
+         (mapc (lambda (,data)
+                 (setf (mem-aref ,arr ,type ,ct)
+                       (funcall ,fun ,data))
+                 (incf ,ct))
+               ,lst))
        ,@body)))
 
 (defun pslib_errornum<0 (num)

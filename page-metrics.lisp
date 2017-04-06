@@ -15,19 +15,19 @@
   (defun gen-papersize-iso216-list (prefix start-size)
     (loop for i from 0 to 10 and
        size = start-size then (* (/ size 2) +iso216-rate+) collect
-	 (list (alexandria:format-symbol t "~a~a" prefix i) (/ size +iso216-rate+)))))
+         (list (alexandria:format-symbol t "~a~a" prefix i) (/ size +iso216-rate+)))))
 
 (defmacro define-iso216-papersize (fun prefix size)
   `(progn
      ,@(mapcar #'(lambda(name-width)
-		   `(progn
-		     (alexandria:define-constant
-			  ,(alexandria:format-symbol t "+~:@(~a~)-PAPER-WIDTH+" (first name-width))
-			  ,(floor (second name-width)) :test #'=)
-		     (alexandria:define-constant
-			  ,(alexandria:format-symbol t "+~:@(~a~)-PAPER-HEIGHT+" (first name-width))
-			  ,(floor (* (second name-width) +iso216-rate+)) :test #'=)))
-	       (funcall fun prefix size))))
+                   `(progn
+                     (alexandria:define-constant
+                          ,(alexandria:format-symbol t "+~:@(~a~)-PAPER-WIDTH+" (first name-width))
+                          ,(floor (second name-width)) :test #'=)
+                     (alexandria:define-constant
+                          ,(alexandria:format-symbol t "+~:@(~a~)-PAPER-HEIGHT+" (first name-width))
+                          ,(floor (* (second name-width) +iso216-rate+)) :test #'=)))
+               (funcall fun prefix size))))
 
 (eval-when (:load-toplevel)
   (define-iso216-papersize gen-papersize-iso216-list "A" 1189)
@@ -47,10 +47,10 @@
 
   (defun page-size-equal-p (p1 p2)
     (if (and
-	 (= (width p1) (width p2))
-	 (= (height p1) (height p2)))
-	t
-	nil))
+         (= (width p1) (width p2))
+         (= (height p1) (height p2)))
+        t
+        nil))
 
   (defmethod print-object ((object page-size) stream)
     (print-unreadable-object (object stream :type t :identity t)
@@ -60,12 +60,12 @@
   (defmacro define-iso216-constants-page-size (prefix)
     `(progn
        ,@(loop for i from 0 to 10 collect
-	      `(alexandria:define-constant
-		   ,(alexandria:format-symbol t "+~@:(~a~a-page-size~)+" prefix i)
-		   (make-instance 'page-size
-				  :width ,(alexandria:format-symbol t "+~@:(~a~a-paper-width~)+" prefix i)
-				  :height ,(alexandria:format-symbol t "+~@:(~a~a-paper-height~)+" prefix i))
-		 :test #'page-size-equal-p))))
+              `(alexandria:define-constant
+                   ,(alexandria:format-symbol t "+~@:(~a~a-page-size~)+" prefix i)
+                   (make-instance 'page-size
+                                  :width ,(alexandria:format-symbol t "+~@:(~a~a-paper-width~)+" prefix i)
+                                  :height ,(alexandria:format-symbol t "+~@:(~a~a-paper-height~)+" prefix i))
+                 :test #'page-size-equal-p))))
 
   (define-iso216-constants-page-size A))
 

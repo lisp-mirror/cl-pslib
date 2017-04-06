@@ -11,18 +11,18 @@
   "(upper-left-x upper-left-y bottom-right-x bottom-right-y) to
    (upper-left-x upper-left-y  w h)"
   (let ((x1 (first coords))
-	(y1 (second coords))
-	(x2 (third coords))
-	(y2 (fourth coords)))
+        (y1 (second coords))
+        (x2 (third coords))
+        (y2 (fourth coords)))
   (list x1 y1 (- x2 x1) (- y2 y1))))
 
 (defun rect->aabb (coords)
   "(upper-left-x upper-left-y  w h) to
    (upper-left-x upper-left-y bottom-right-x bottom-right-y)"
   (let ((x1 (first coords))
-	(y1 (second coords))
-	(w (third coords))
-	(h (fourth coords)))
+        (y1 (second coords))
+        (w (third coords))
+        (h (fourth coords)))
   (list x1 y1 (+ x1 w) (+ y1 h))))
 
 (defun inside-aabb-p (aabb x y)
@@ -40,7 +40,7 @@
    Return a list containing m q and two flag indicating if the line is
    paralle to x or y respectively"
   (let ((dy (- (second b) (second a)))
-	(dx (- (first b)  (first a))))
+        (dx (- (first b)  (first a))))
     (cond
       ((<= 0 dy thresh) ;parallel to x
        (list 0 (second b) t nil))
@@ -48,37 +48,37 @@
        (list 0 0 nil t))
       (t
        (list (/ dy dx) (- (second a ) (* (/ dy dx) (first a))) nil nil)))))
-  
-       
+
+
 
 (defun recursive-bezier (pairs &key (threshold 1))
   (labels ((midpoint (pb pe)
-	     (mapcar #'(lambda (x) (/ x 2)) (2d-vector-sum pb pe)))
-	   (eqvec-p (a b) (and (= (first a) (first b))
-			       (= (second a) (second b)))))
+             (mapcar #'(lambda (x) (/ x 2)) (2d-vector-sum pb pe)))
+           (eqvec-p (a b) (and (= (first a) (first b))
+                               (= (second a) (second b)))))
 
     (let* ((p1 (first pairs))
-	   (p2 (second pairs))
-	   (p3 (third pairs))
-	   (p4 (fourth pairs))
-	   (p12 (midpoint p1 p2))
-	   (p23 (midpoint p2 p3))
-	   (p34 (midpoint p3 p4))
-	   (p12-23 (midpoint p12 p23))
-	   (p23-34 (midpoint p23 p34))
-	   (res (midpoint p12-23 p23-34)))
+           (p2 (second pairs))
+           (p3 (third pairs))
+           (p4 (fourth pairs))
+           (p12 (midpoint p1 p2))
+           (p23 (midpoint p2 p3))
+           (p34 (midpoint p3 p4))
+           (p12-23 (midpoint p12 p23))
+           (p23-34 (midpoint p23 p34))
+           (res (midpoint p12-23 p23-34)))
       (if (>= (2d-vector-magn (2d-vector-diff p1 res)) threshold)
-	  (remove-duplicates
-	   (append (list p1)
-		   (recursive-bezier (list p1 p12 p12-23 res) :threshold threshold)
-		   (list res)
-		   (recursive-bezier (list res p23-34 p34 p4) :threshold threshold)
-		   (list p4))
-	   :test #'eqvec-p)
-	  nil))))
-    
-    
-	     
+          (remove-duplicates
+           (append (list p1)
+                   (recursive-bezier (list p1 p12 p12-23 res) :threshold threshold)
+                   (list res)
+                   (recursive-bezier (list res p23-34 p34 p4) :threshold threshold)
+                   (list p4))
+           :test #'eqvec-p)
+          nil))))
+
+
+
 
 (defmacro funcall-if-not-null (func val)
   (if (not (null func))
@@ -109,19 +109,19 @@
 
 (defun 2d-vector-list-translate (pairs &optional (dx 0) (dy 0))
   "translate pairs by dx and dy"
-  (mapcar #'(lambda (v) (2d-vector-map v 
-				       :funcx #'(lambda (x) (+ x dx)) 
-				       :funcy #'(lambda (y) (+ y dy))))
-	  pairs))
+  (mapcar #'(lambda (v) (2d-vector-map v
+                                       :funcx #'(lambda (x) (+ x dx))
+                                       :funcy #'(lambda (y) (+ y dy))))
+          pairs))
 
 (defun 2d-vector-list-rotate (pairs angle)
   (mapcar #'(lambda (v) (2d-vector-rotate v angle)) pairs))
 
 (defun 2d-vector-sum (a b)
-  (mapcar #'(lambda (x y) (+ x y)) a b)) 
+  (mapcar #'(lambda (x y) (+ x y)) a b))
 
 (defun 2d-vector-diff (a b)
-  (mapcar #'(lambda (x y) (- x y)) a b)) 
+  (mapcar #'(lambda (x y) (- x y)) a b))
 
 (defun 2d-vector-dot-product (a b)
  (+ (* (first a) (first b)) (* (second a) (second b))))
@@ -145,13 +145,13 @@
 
 (defun 2d-vector-angle (a b)
   (let* ((a-norm (2d-vector-normalize a))
-	 (b-norm (2d-vector-normalize b))
-	 (dot-product (2d-vector-dot-product a-norm b-norm))
-	 (angle (acos dot-product)))
-    
+         (b-norm (2d-vector-normalize b))
+         (dot-product (2d-vector-dot-product a-norm b-norm))
+         (angle (acos dot-product)))
+
     (if (< (2d-vector-cross-product a b) 0)
-	(- angle)
-	angle)))
+        (- angle)
+        angle)))
 
 
 (defun 2d-vector-rotate (a angle)
@@ -171,22 +171,20 @@
 (defun xy->interleaved-xy (xs ys &key (modfunc-x nil) (modfunc-y nil))
   "Convert (x1 x2 x3...) (y1 y2 y3...) to ( (funcall modfunc-x x1) (funcall modfunc-y y1)...)"
   (pair->interleaved-xy (xy->pair (if (not (null modfunc-x))
-				      (mapcar modfunc-x xs)
-				      xs)
-				  (if (not (null modfunc-y))
-				      (mapcar modfunc-y ys)
-				      ys))))
-		
-		  
+                                      (mapcar modfunc-x xs)
+                                      xs)
+                                  (if (not (null modfunc-y))
+                                      (mapcar modfunc-y ys)
+                                      ys))))
+
+
 (defun interleaved-xy->pair (xy)
   (macrolet ((get-from-list (when-clause list)
-	       `(loop 
-		   for i in ,list
-		   for c = 0 then (1+ c)
-		   when (,when-clause c)
-		   collect i)))
+               `(loop
+                   for i in ,list
+                   for c = 0 then (1+ c)
+                   when (,when-clause c)
+                   collect i)))
     (let ((xs (get-from-list evenp xy))
-	  (ys (get-from-list oddp xy)))
+          (ys (get-from-list oddp xy)))
       (xy->pair xs ys))))
-	
-       
