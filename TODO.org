@@ -1,0 +1,3 @@
+* TODO Add more shapes [%]
+** TODO Regular polygons.
+*** TODO non convex (stars).

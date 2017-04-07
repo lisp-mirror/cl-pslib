@@ -30,12 +30,11 @@
 (defmacro with-list->foreign-array ((arr type &optional (fun #'identity)) lst &body body)
   (alexandria:with-gensyms (ct data)
     `(cffi:with-foreign-object (,arr ,type (length ,lst))
-       (let ((,ct 0))
-         (mapc (lambda (,data)
-                 (setf (mem-aref ,arr ,type ,ct)
-                       (funcall ,fun ,data))
-                 (incf ,ct))
-               ,lst))
+       (loop
+          for ,ct   from 0
+          for ,data in ,lst do
+            (setf (mem-aref ,arr ,type ,ct)
+                  (funcall  ,fun ,data)))
        ,@body)))
 
 (defun pslib_errornum<0 (num)
