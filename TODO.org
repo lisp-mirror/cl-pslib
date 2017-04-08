@@ -1,3 +1,4 @@
 * TODO Add more shapes [%]
 ** TODO Regular polygons.
 *** TODO non convex (stars).
+* TODO Add a test suite.
