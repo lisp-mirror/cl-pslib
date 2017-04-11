@@ -518,15 +518,31 @@
                        (components integer)
                        (bpc integer)
                        (params string))
-    (with-psdoc-ptr (ptr) object
-      (with-list->foreign-array (data-arr :char #'identity) data
-          (let ((image-id (ps_open_image ptr type source data-arr length
-                                         width height components bpc params)))
+  (with-psdoc-ptr (ptr) object
+    (with-list->foreign-array (data-arr :unsigned-char #'identity) data
+      (let ((image-id (ps_open_image ptr type source data-arr length
+                                     width height components bpc params)))
 
-            (if (<= image-id 0)
-                (error 'image-load-error
-                       :text (format nil "Load of image from memory failed"))
-                image-id)))))
+        (if (<= image-id 0)
+            (error 'image-load-error
+                   :text (format nil "Load of image from memory (list) failed"))
+            image-id)))))
+
+(defmethod open-image ((object psdoc) (type string)
+                       (source string) (data vector)
+                       (length integer) (width integer)
+                       (height integer)
+                       (components integer)
+                       (bpc integer)
+                       (params string))
+  (with-psdoc-ptr (ptr) object
+    (with-vector->foreign-array (data-arr :unsigned-char #'identity) data
+      (let ((image-id (ps_open_image ptr type source data-arr length
+                                     width height components bpc params)))
+        (if (<= image-id 0)
+            (error 'image-load-error
+                   :text (format nil "Load of image from memory (array) failed"))
+            image-id)))))
 
 (defmethod place-image ((object psdoc) (image-id integer) (x number) (y number) (scale number))
   (with-psdoc-ptr (ptr) object

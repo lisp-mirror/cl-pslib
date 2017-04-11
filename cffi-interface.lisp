@@ -7,7 +7,6 @@
 
 (in-package :cl-pslib)
 
-
 (define-foreign-library libps
     (:darwin "libps.dylib")
   (:unix (:or "libps.so.0" "libps.so"))
@@ -33,6 +32,16 @@
        (loop
           for ,ct   from 0
           for ,data in ,lst do
+            (setf (mem-aref ,arr ,type ,ct)
+                  (funcall  ,fun ,data)))
+       ,@body)))
+
+(defmacro with-vector->foreign-array ((arr type &optional (fun #'identity)) vec &body body)
+  (alexandria:with-gensyms (ct data)
+    `(cffi:with-foreign-object (,arr ,type (length ,vec))
+       (loop
+          for ,ct   from 0
+          for ,data across ,vec do
             (setf (mem-aref ,arr ,type ,ct)
                   (funcall  ,fun ,data)))
        ,@body)))
