@@ -501,7 +501,8 @@
                  :text (format nil "Can not set spot color with name ~a" name))
           color-id))))
 
-(defmethod open-image-file ((object psdoc) (type string) (file-name string) (param string) (int-param integer))
+(defmethod open-image-file ((object psdoc) (type string) (file-name string)
+                            (param string) (int-param integer))
   (with-psdoc-ptr (ptr) object
     (let ((image-id (ps_open_image_file ptr type file-name param int-param)))
       (if (<= image-id 0)
