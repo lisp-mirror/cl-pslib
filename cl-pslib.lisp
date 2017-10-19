@@ -694,7 +694,7 @@
   (with-psdoc-ptr (ptr) object
     (with-list->foreign-array (data-arr :float #'identity)
         (map-into (make-list 3) #'(lambda() (float 0)))
-      (ps_string_geometry ptr text end font-id size data-arr)
+      (ps_string_geometry ptr text end font-id (millimiter->point size) data-arr)
       (let ((metrics-list '()))
         (setf metrics-list
               (dotimes (i 3 (reverse metrics-list))
@@ -734,13 +734,20 @@
   (let* ((ct-pts (mapcar #'(lambda (p) (list (conv-mt (first p)) (conv-mt (second p))))
                          (list p1 p2 p3 p4)))
          (pairs (recursive-bezier ct-pts :threshold threshold)))
-    (format t "~a~%" pairs)
     (mapcar #'(lambda (p) (lineto object (first p) (second p))) pairs)))
 
 (defmethod accomodate-text ((object psdoc) font text box-h box-w
                             &optional
                               (starting-font-size 20.0)
                               (horizontal-align +boxed-text-h-mode-center+))
+  (let ((geometry (string-geometry object text starting-font-size font)))
+    ;; long string without spaces, pre-shrink
+    (when (and (not (cl-ppcre:scan "\\p{Separator}" text))
+               (>   (width geometry) box-w))
+      (do ((size starting-font-size (- size 0.5)))
+          ((<= (width (string-geometry object text size font))
+               box-w))
+        (setf starting-font-size size))))
   (ps:setfont object font starting-font-size)
   (let ((measures (multiple-value-list
                    (ps:show-boxed object
