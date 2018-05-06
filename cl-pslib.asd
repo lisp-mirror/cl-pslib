@@ -14,7 +14,7 @@
   :version "0.0.1"
   :depends-on (:alexandria
                :cffi
-	       :cl-colors
+	       :cl-colors2
 	       :cl-ppcre-unicode)
   :components ((:file "package")
 	       (:file "conditions"
@@ -37,4 +37,3 @@
 				   "page-metrics"
 				   "graphics-utils"
 				   "pslib"))))
-
