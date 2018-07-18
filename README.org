@@ -86,7 +86,7 @@ There are some exceptions listed below.
 
 * BUGS
 
-  Please send bug report to cage at katamail dot com
+  Please send bug report to cage-dev at twistfold dot it
 
 * License
   This library is released under Lisp Lesser General Public license (see
