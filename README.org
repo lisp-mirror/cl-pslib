@@ -86,7 +86,9 @@ There are some exceptions listed below.
 
 * BUGS
 
-  Please send bug report to cage-dev at twistfold dot it
+  Please file bug report on
+  the [[https://notabug.org/cage/cl-pslib/issues][issue tracker]]
+
 
 * License
   This library is released under Lisp Lesser General Public license (see
