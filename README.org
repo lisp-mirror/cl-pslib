@@ -1,4 +1,42 @@
 [[http://quickdocs.org/cl-pslib/][http://quickdocs.org/badge/cl-pslib.svg]]
+* Important note
+  The 'ps' nickname for this package has been removed.
+
+  This means that if you are using this library you should replace all
+  occurences of the 'ps' package qualifier with 'cl-pslib'.
+
+  Examples
+
+  from:
+
+  #+BEGIN_SRC common-lisp
+  (ps:get-value doc "boxheight")
+  #+END_SRC
+
+  to:
+
+  #+BEGIN_SRC common-lisp
+  (cl-pslib:get-value doc "boxheight")
+  #+END_SRC
+
+  and from:
+
+  #+BEGIN_SRC common-lisp
+  (defpackage :foo
+    (:use :ps))
+  #+END_SRC
+
+  to:
+
+  #+BEGIN_SRC common-lisp
+  (defpackage :foo
+    (:use :cl-pslib))
+  #+END_SRC
+
+  Alternatively., if you are using ECL, ABCL, CCL or SBCL compiler you
+  can setup a package local nickname as showed
+  [[http://www.sbcl.org/manual/index.html#Package_002dLocal-Nicknames][here]].
+
 * Introduction
 
 Cl-pslib is a (thin) wrapper around
@@ -88,7 +126,6 @@ There are some exceptions listed below.
 
   Please file bug report on
   the [[https://notabug.org/cage/cl-pslib/issues][issue tracker]]
-
 
 * License
   This library is released under Lisp Lesser General Public license (see
