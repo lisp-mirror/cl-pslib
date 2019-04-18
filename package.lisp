@@ -5,10 +5,10 @@
 ;; (http://opensource.franz.com/preamble.html),
 ;; known as the LLGPL
 
-
-(defpackage #:cl-pslib
-  (:use :cl :cffi :cl-colors)
-  (:nicknames :ps)
+(defpackage :cl-pslib
+  (:use :cl
+        :cffi
+        :cl-colors)
   (:export
    :page-size
    :width

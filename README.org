@@ -61,7 +61,7 @@ There are some exceptions listed below.
   The same is true for '(ps_)new' method;
 - 'open-doc' method will pass the output of pslib (i.e.the PostScript
   file) to a lisp callback function if the second argument of the function is
-  nil; by default the callback just copy the output in ps:*callback-string*.
+  nil; by default the callback just copy the output in cl-pslib:*callback-string*.
   This maybe can be useful for generate a file in a web application.
 - the string-geometry method return an instance of text-metrics class
 * Issues

@@ -748,16 +748,16 @@
           ((<= (width (string-geometry object text size font))
                box-w))
         (setf starting-font-size size))))
-  (ps:setfont object font starting-font-size)
+  (setfont object font starting-font-size)
   (let ((measures (multiple-value-list
-                   (ps:show-boxed object
-                                  text
-                                  0
-                                  0
-                                  box-w
-                                  0
-                                  horizontal-align
-                                  +boxed-text-feature-blind+))))
+                   (show-boxed object
+                               text
+                               0
+                               0
+                               box-w
+                               0
+                               horizontal-align
+                               +boxed-text-feature-blind+))))
     (if (<= (second measures) ;; height
             box-h)
         (values (second measures) starting-font-size)
@@ -770,7 +770,7 @@
                                         (maximum-font-size 20.0)
                                         (vertical-align :center)
                                         (horizontal-align +boxed-text-h-mode-center+))
-  (let* ((font-handle (ps:findfont object font "" t)))
+  (let* ((font-handle (findfont object font "" t)))
     (draw-text-confined-in-box object
                                font-handle
                                text
@@ -789,12 +789,12 @@
                                         (maximum-font-size 20.0)
                                         (vertical-align :center)
                                         (horizontal-align +boxed-text-h-mode-center+))
-  (ps:save object)
-  (ps:set-parameter object ps:+value-key-linebreak+ ps:+true+)
+  (save object)
+  (set-parameter object +value-key-linebreak+ +true+)
   (multiple-value-bind (text-h actual-font-size)
       (accomodate-text object font text height width maximum-font-size
                        horizontal-align)
-    (ps:setfont object font actual-font-size)
+    (setfont object font actual-font-size)
     (let ((y (ecase vertical-align
                (:center
                 (+ top (- (/ height 2) (/ text-h 2))))
@@ -802,7 +802,7 @@
                 top)
                (:top
                 (- (+ top height) text-h)))))
-      (ps:show-boxed object
+      (show-boxed object
                      text
                      left
                      y
@@ -810,4 +810,4 @@
                      text-h
                      horizontal-align
                      ""))
-    (ps:restore object)))
+    (restore object)))
