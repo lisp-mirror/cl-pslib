@@ -740,28 +740,43 @@
                             &optional
                               (starting-font-size 20.0)
                               (horizontal-align +boxed-text-h-mode-center+))
-  (let ((geometry (string-geometry object text starting-font-size font)))
-    ;; long string without spaces, pre-shrink
-    (when (and (not (cl-ppcre:scan "\\p{Separator}" text))
+  (labels ((accomodate-width (text-to-accomodate)
+             (do ((size starting-font-size (- size 0.5)))
+                 ((<= (width (string-geometry object text-to-accomodate size font))
+                      box-w))
+               (setf starting-font-size size))))
+    (let ((geometry (string-geometry object text starting-font-size font)))
+      ;; pre-shrink
+      (if (and (not (cl-ppcre:scan "\\p{Separator}" text))
                (>   (width geometry) box-w))
-      (do ((size starting-font-size (- size 0.5)))
-          ((<= (width (string-geometry object text size font))
-               box-w))
-        (setf starting-font-size size))))
-  (setfont object font starting-font-size)
-  (let ((measures (multiple-value-list
-                   (show-boxed object
-                               text
-                               0
-                               0
-                               box-w
-                               0
-                               horizontal-align
-                               +boxed-text-feature-blind+))))
-    (if (<= (second measures) ;; height
-            box-h)
-        (values (second measures) starting-font-size)
-        (accomodate-text object font text box-h box-w (- starting-font-size .1)))))
+          (accomodate-width text)
+          (let* ((words            (cl-ppcre:split "\\p{Separator}" text))
+                 (all-words-length (loop for word in words collect
+                                        (cons (width (string-geometry object
+                                                                      word
+                                                                      starting-font-size
+                                                                      font))
+                                              word)))
+                 (max-length-string (cdr (reduce (lambda (a b)
+                                                   (if (> (car a) (car b))
+                                                       a
+                                                       b))
+                                                 all-words-length))))
+            (accomodate-width max-length-string))))
+    (setfont object font starting-font-size)
+    (let ((measures (multiple-value-list
+                     (show-boxed object
+                                 text
+                                 0
+                                 0
+                                 box-w
+                                 0
+                                 horizontal-align
+                                 +boxed-text-feature-blind+))))
+      (if (<= (second measures) ;; height
+              box-h)
+          (values (second measures) starting-font-size)
+          (accomodate-text object font text box-h box-w (- starting-font-size .1))))))
 
 (defmethod draw-text-confined-in-box ((object psdoc) (font string) (text string)
                                       (left number) (top number)
