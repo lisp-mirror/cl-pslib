@@ -18,11 +18,18 @@
 (in-package :cl-pslib)
 
 (defparameter *output* "pslib-tree-examples.ps")
+
 (defparameter *trunk-color* cl-colors:+firebrick+)
-(defparameter *leaves-color* (list cl-colors:+yellow+ cl-colors:+violetred+ cl-colors:+green+))
+
+(defparameter *leaves-color* (list cl-colors:+yellow+
+                                   cl-colors:+violetred+
+                                   cl-colors:+green+))
 (defparameter *line-width* 8.0)
+
 (defparameter *page-size* +a4-page-size+)
+
 (defparameter *trunk* '(0 110))
+
 (defparameter *leaf-thrs* 2.0)
 
 (defun draw-branch (doc parent branch line-width)
@@ -31,32 +38,35 @@
     (save doc)
     (when (> line-width 1.5)
       (setlinewidth doc line-width))
-    (setcolor doc +color-type-stroke+ 
-	      (if (<= magn *leaf-thrs*) 
-		  (nth (random (length *leaves-color*)) *leaves-color*)
+    (setcolor doc +color-type-stroke+
+	      (if (<= magn *leaf-thrs*)
+		  (nth (random (length *leaves-color*))
+                       *leaves-color*)
 		  *trunk-color*))
     (moveto doc (first parent) (second parent))
-    (lineto doc (first tr-br) (second tr-br))
+    (lineto doc (first tr-br)  (second tr-br))
     (stroke doc)
     (restore doc)))
 
 (defun node (doc sofar &optional (trunk *trunk*) (line-width *line-width*))
-  (let* ((mag (/ (2d-vector-magn trunk) (+ 1.1 (random 2.0))))
-	 (angle (2d-vector-angle '(0.0 10.0) trunk))
+  (let* ((mag (/ (2d-vector-magn trunk)
+                 (+ 1.1 (random 2.0))))
+	 (angle (2d-vector-angle '(0.0 10.0)
+                                 trunk))
 	 (branch-num (+ 3 (random 2)))
 	 (branches (loop for i from 0 to branch-num collect
 			(2d-vector-rotate (list 0 mag)
-					  (+ (* (expt -1 (1+ (random 2)))) angle
-					     (random (/ (/ pi 2) (1+ (random 4)))))))))
+					  (+ (* (expt -1 (1+ (random 2))))
+                                             angle
+					     (random (/ (/ pi 2)
+                                                        (1+ (random 4)))))))))
     (when (>= mag (/ *leaf-thrs* 2))
       (when (eq trunk *trunk*)
 	(draw-branch doc '(0 0) trunk line-width))
       (mapc #'(lambda (br)
 		(draw-branch doc (2d-vector-sum sofar trunk) br line-width)
-		(node doc (2d-vector-sum trunk sofar) br (- line-width 2)))
+		(node        doc (2d-vector-sum trunk sofar) br (- line-width 2)))
 	    branches))))
-
-
 
 (let ((doc (make-instance 'psdoc :page-size *page-size*)))
   (open-doc doc  *output*)
@@ -68,4 +78,3 @@
   (end-page doc)
   (close-doc doc)
   (shutdown))
-

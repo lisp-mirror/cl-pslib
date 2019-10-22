@@ -14,18 +14,23 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 (in-package :cl-pslib)
 
 (defparameter *output* "pslib-mand-examples.ps")
-(defparameter *line-width* 8.0)
-(defparameter *page-size* +a4-page-size+)
-(defparameter *color* cl-colors:+firebrick+)
-(defparameter *rect-size* 0.1) ; 0.1 mm
-(defparameter *max-iter* 1000)
-(defparameter *c-plane-step* 0.007)
-(defparameter *scale* (/ (width *page-size*) 5))
 
+(defparameter *line-width* 8.0)
+
+(defparameter *page-size* +a4-page-size+)
+
+(defparameter *color* cl-colors:+firebrick+)
+
+(defparameter *rect-size* 0.1) ; 0.1 mm
+
+(defparameter *max-iter* 1000)
+
+(defparameter *c-plane-step* 0.007)
+
+(defparameter *scale* (/ (width *page-size*) 5))
 
 (defparameter *colors* (list
 			+orange1+
@@ -54,8 +59,6 @@
 			+red4+
 			+debianred+))
 
-
-
 (defun escape (c)
   (do* ((ct 0 (1+ ct))
 	(p (+ (expt 0 2) c) (+ (expt z 2) c))
@@ -63,14 +66,11 @@
        ((not (<= (abs p) 2)) ct)
     (if (>= ct *max-iter*)
 	(return-from escape ct))))
-  
-
 
 (let ((doc (make-instance 'psdoc :page-size *page-size*)))
   (open-doc doc  *output*)
   (begin-page doc)
   (save doc)
-
   (translate doc (/ (width (page-size doc)) 2)
 	     (/ (height (page-size doc)) 2))
   (scale doc *scale* *scale*)
@@ -86,5 +86,3 @@
   (end-page doc)
   (close-doc doc)
   (shutdown))
-
-

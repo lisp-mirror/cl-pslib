@@ -181,7 +181,7 @@
 
 (defgeneric setlinejoin (object type))
 
-(defgeneric setlinewidth (object type))
+(defgeneric setlinewidth (object width))
 
 (defgeneric setmiterlimit (object type))
 
@@ -222,6 +222,8 @@
                                        &key
                                          maximum-font-size
                                          horizontal-align))
+
+(defgeneric rounded-rectangle (object x y width height &key roundness))
 
 (defun shutdown ()
   (ps_shutdown))
@@ -826,3 +828,50 @@
                      horizontal-align
                      ""))
     (restore object)))
+
+(defmethod rounded-rectangle ((object psdoc)
+                              (x     number) (y      number)
+                              (width number) (height number)
+                              &key (roundness  (* 0.1 (min width height))))
+  (save object)
+  (let* ((min-size      (min width height))
+         (gap           (if (<= roundness
+                                (/ min-size 2.0))
+                            roundness
+                            (* 0.1 min-size)))
+         (actual-width  (- width  gap))
+         (actual-height (- height gap)))
+    ;; frame
+    (moveto object (+ x gap)          y)
+    (lineto object (+ x actual-width) y)
+    (stroke object)
+    (moveto object (+ x gap)          (+ y height))
+    (lineto object (+ x actual-width) (+ y height))
+    (stroke object)
+    (moveto object x                  (+ y gap))
+    (lineto object x                  (+ y actual-height))
+    (stroke object)
+    (moveto object (+ x width) (+ y gap))
+    (lineto object (+ x width) (+ y actual-height))
+    (stroke object)
+    ;; arcs
+    ;; b          c
+    ;;  +--------+
+    ;;  |        |
+    ;;  |        |
+    ;;  +--------+
+    ;; a          d
+    ;;
+    ;; starting with a...
+    (arc    object (+ x gap)          (+ y gap)           gap 180 270)
+    (stroke object)
+    ;; b
+    (arc    object (+ x gap)          (+ y actual-height) gap  90 180)
+    (stroke object)
+    ;; c
+    (arc    object (+ x actual-width) (+ y actual-height) gap   0  90)
+    (stroke object)
+    ;; d
+    (arc    object (+ x actual-width) (+ y gap)           gap 270   0)
+    (stroke object))
+  (restore object))

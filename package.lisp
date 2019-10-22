@@ -345,4 +345,5 @@
    :curve-to
    :bezier-to
    :accomodate-text
-   :draw-text-confined-in-box))
+   :draw-text-confined-in-box
+   :rounded-rectangle))
