@@ -54,7 +54,13 @@
 
   (defmethod print-object ((object page-size) stream)
     (print-unreadable-object (object stream :type t :identity t)
-      (format stream "width: ~s height: ~s" (width object) (height object)))))
+      (format stream "width: ~s height: ~s" (width object) (height object))))
+
+  (defmethod make-load-form ((object page-size) &optional environment)
+    (make-load-form-saving-slots object
+                                 :slot-names '(width height)
+                                 :environment environment)))
+
 
 (eval-when (:load-toplevel)
   (defmacro define-iso216-constants-page-size (prefix)

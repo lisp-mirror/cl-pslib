@@ -875,3 +875,8 @@
     (arc    object (+ x actual-width) (+ y gap)           gap 270   0)
     (stroke object))
   (restore object))
+
+(defmacro with-stroke ((doc) &body body)
+  `(progn
+     ,@body
+     (stroke ,doc)))

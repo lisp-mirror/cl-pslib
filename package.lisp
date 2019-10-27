@@ -346,4 +346,5 @@
    :bezier-to
    :accomodate-text
    :draw-text-confined-in-box
-   :rounded-rectangle))
+   :rounded-rectangle
+   :with-stroke))
