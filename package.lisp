@@ -135,7 +135,9 @@
 
    :pslib_errornum<0
    :*callback-string*
+   :*callback-stream*
    :write-to-string
+   :write-to-stream
 
    :text-error
    :spotcolor-error

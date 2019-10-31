@@ -20,11 +20,19 @@
 
 (defparameter *callback-string* (string ""))
 
+(defparameter *callback-stream* *standard-output*)
+
 (cffi:defcallback write-to-string size ((doc :pointer) (data :pointer) (size size))
   (declare (ignore doc))
   (setf *callback-string* (concatenate 'string *callback-string*
                                        (foreign-string-to-lisp data :count size)))
   size)
+
+(cffi:defcallback write-to-stream size ((doc :pointer) (data :pointer) (size size))
+  (declare (ignore doc))
+  (let ((res (foreign-string-to-lisp data :count size)))
+    (write-sequence res *callback-stream*)
+    size))
 
 (defmacro with-list->foreign-array ((arr type &optional (fun #'identity)) lst &body body)
   (alexandria:with-gensyms (ct data)
