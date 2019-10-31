@@ -435,8 +435,7 @@
 
 (defmethod begin-template ((object psdoc) (width number) (height number))
   (with-psdoc-ptr (ptr) object
-    (pslib_errornum<0
-     (ps_begin_template ptr (conv-mt width) (conv-mt height)))))
+    (ps_begin_template ptr (conv-mt width) (conv-mt height))))
 
 (defmethod clip ((object psdoc))
   (with-psdoc-ptr (ptr) object
