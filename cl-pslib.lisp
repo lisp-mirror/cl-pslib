@@ -83,7 +83,7 @@
 
 (defgeneric begin-pattern (object width height xstep ystep paint-type))
 
-(defgeneric begin-template (object width height))
+;;(defgeneric begin-template (object width height))
 
 (defgeneric circle (object x y radius))
 
@@ -113,7 +113,7 @@
 
 (defgeneric end-pattern (object))
 
-(defgeneric end-template (object))
+;;(defgeneric end-template (object))
 
 (defgeneric fill-path (object))
 
@@ -246,7 +246,7 @@
   `(with-accessors ((,ptr psdoc-pointer)) ,object
      ,@body))
 
-(define-only-psdoc-method (end-font end-glyph end-page end-pattern end-template restore save))
+(define-only-psdoc-method (end-font end-glyph end-page end-pattern #| end-template |# restore save))
 
 (defmethod open-doc ((object psdoc) (file pathname))
   (pslib_errornum<0 (open-doc object (namestring file))))
@@ -433,9 +433,9 @@
                                         (conv-mt ystep)
                                         paint-type))))
 
-(defmethod begin-template ((object psdoc) (width number) (height number))
-  (with-psdoc-ptr (ptr) object
-    (ps_begin_template ptr (conv-mt width) (conv-mt height))))
+;; (defmethod begin-template ((object psdoc) (width number) (height number))
+;;   (with-psdoc-ptr (ptr) object
+;;     (ps_begin_template ptr (conv-mt width) (conv-mt height))))
 
 (defmethod clip ((object psdoc))
   (with-psdoc-ptr (ptr) object
