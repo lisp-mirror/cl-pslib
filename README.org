@@ -121,6 +121,9 @@ There are some exceptions listed below.
   Note that the whole library is in an alpha stage, testing is still in
   progress, please see [[NO WARRANTY][section below]]
 
+  - to use  the template features ~begin-template~  and ~and-template~
+    a version >= 0.47 must be used.
+
 ** Missing function
    The high-level API does not still remap this functions:
 

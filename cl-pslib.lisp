@@ -83,7 +83,7 @@
 
 (defgeneric begin-pattern (object width height xstep ystep paint-type))
 
-;;(defgeneric begin-template (object width height))
+(defgeneric begin-template (object width height))
 
 (defgeneric circle (object x y radius))
 
@@ -113,7 +113,7 @@
 
 (defgeneric end-pattern (object))
 
-;;(defgeneric end-template (object))
+(defgeneric end-template (object))
 
 (defgeneric fill-path (object))
 
@@ -218,7 +218,7 @@
                                starting-font-size
                                horizontal-align))
 
-(defgeneric draw-text-confined-in-box (object font text left top width height
+(defgeneric draw-text-confined-in-box (object font text left bottom width height
                                        &key
                                          maximum-font-size
                                          horizontal-align))
@@ -246,7 +246,7 @@
   `(with-accessors ((,ptr psdoc-pointer)) ,object
      ,@body))
 
-(define-only-psdoc-method (end-font end-glyph end-page end-pattern #| end-template |# restore save))
+(define-only-psdoc-method (end-font end-glyph end-page end-pattern end-template restore save))
 
 (defmethod open-doc ((object psdoc) (file pathname))
   (pslib_errornum<0 (open-doc object (namestring file))))
@@ -433,9 +433,9 @@
                                         (conv-mt ystep)
                                         paint-type))))
 
-;; (defmethod begin-template ((object psdoc) (width number) (height number))
-;;   (with-psdoc-ptr (ptr) object
-;;     (ps_begin_template ptr (conv-mt width) (conv-mt height))))
+(defmethod begin-template ((object psdoc) (width number) (height number))
+  (with-psdoc-ptr (ptr) object
+    (ps_begin_template ptr (conv-mt width) (conv-mt height))))
 
 (defmethod clip ((object psdoc))
   (with-psdoc-ptr (ptr) object
@@ -779,45 +779,54 @@
           (values (second measures) starting-font-size)
           (accomodate-text object font text box-h box-w (- starting-font-size .1))))))
 
-(defmethod draw-text-confined-in-box ((object psdoc) (font string) (text string)
-                                      (left number) (top number)
-                                      (width number) (height number)
+(defmethod draw-text-confined-in-box ((object psdoc)  (font   string)  (text string)
+                                      (left   number) (bottom number)
+                                      (width  number) (height number)
                                       &key
                                         (maximum-font-size 20.0)
-                                        (vertical-align :center)
-                                        (horizontal-align +boxed-text-h-mode-center+))
+                                        (vertical-align    :center)
+                                        (horizontal-align  +boxed-text-h-mode-center+))
   (let* ((font-handle (findfont object font "" t)))
     (draw-text-confined-in-box object
                                font-handle
                                text
                                left
-                               top
+                               bottom
                                width
                                height
                                :maximum-font-size maximum-font-size
                                :vertical-align    vertical-align
                                :horizontal-align  horizontal-align)))
 
-(defmethod draw-text-confined-in-box ((object psdoc) font (text string)
-                                      (left number) (top number)
+(defmethod draw-text-confined-in-box ((object psdoc) font
+                                      (text  string)
+                                      (left  number) (bottom number)
                                       (width number) (height number)
                                       &key
                                         (maximum-font-size 20.0)
-                                        (vertical-align :center)
-                                        (horizontal-align +boxed-text-h-mode-center+))
+                                        (vertical-align    :center)
+                                        (horizontal-align  +boxed-text-h-mode-center+))
   (save object)
   (set-parameter object +value-key-linebreak+ +true+)
   (multiple-value-bind (text-h actual-font-size)
-      (accomodate-text object font text height width maximum-font-size
+      (accomodate-text object
+                       font
+                       text
+                       height
+                       width
+                       maximum-font-size
                        horizontal-align)
     (setfont object font actual-font-size)
     (let ((y (ecase vertical-align
                (:center
-                (+ top (- (/ height 2) (/ text-h 2))))
+                (+ bottom
+                   (- (/ height 2)
+                      (/ text-h 2))))
                (:bottom
-                top)
+                bottom)
                (:top
-                (- (+ top height) text-h)))))
+                (- (+ bottom height)
+                   text-h)))))
       (show-boxed object
                      text
                      left

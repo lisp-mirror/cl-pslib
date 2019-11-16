@@ -15,20 +15,19 @@
                         ,cn :test #'string=))
                names)))
 
-
 (alexandria:define-constant +true+ "true" :test #'string=)
+
 (alexandria:define-constant +false+ "false" :test #'string=)
 
-
 (define-string-constant ("local-link") "fitpage" "fitwidth" "fitheight" "fitbbox")
+
 (define-string-constant ("pdf-link") "fitpage" "fitwidth" "fitheight" "fitbbox")
 
 (alexandria:define-constant +pattern-paint-type1+ 1 :test #'=)
+
 (alexandria:define-constant +pattern-paint-type2+ 2 :test #'=)
 
-
 (define-string-constant ("find-font-encoding") "builtin")
-
 
 (define-string-constant ("value-key") "fontsize" "font" "imagewidth" "imageheight"
                         "capheight" "ascender" "descender"

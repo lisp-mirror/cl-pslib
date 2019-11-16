@@ -286,7 +286,7 @@
    :begin-font
    :begin-glyph
    :begin-pattern
-   ;;:begin-template
+   :begin-template
    :clip
    :close-image
    :close-path
@@ -299,7 +299,7 @@
    :end-glyph
    :end-page
    :end-pattern
-   ;;:end-template
+   :end-template
    :findfont
    :setfont
    :get-majorversion
