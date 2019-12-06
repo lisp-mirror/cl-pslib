@@ -39,8 +39,7 @@
    (writeproc
     :initform (callback write-to-string)
     :accessor writeproc
-    :initarg :writeproc
-    :type cffi:callback)))
+    :initarg :writeproc)))
 
 (defmethod print-object ((object psdoc) stream)
   (print-unreadable-object (object stream :type t :identity t)
