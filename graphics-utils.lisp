@@ -7,33 +7,110 @@
 
 (in-package :cl-pslib)
 
-(defun aabb->rect (coords)
+(defun vec-x (v)
+  (elt v 0))
+
+(defun vec-y (v)
+  (elt v 1))
+
+(defun vec-z (v)
+  (elt v 2))
+
+(defun aabb-min-x (aabb)
+  (elt aabb 0))
+
+(defun aabb-max-x (aabb)
+  (elt aabb 2))
+
+(defun aabb-min-y (aabb)
+  (elt aabb 1))
+
+(defun aabb-max-y (aabb)
+  (elt aabb 3))
+
+(defun aabb-area (aabb)
+  (let ((rect (aabb->rect aabb)))
+    (* (elt rect 2) (elt rect 3))))
+
+(defun aabb->rect (aabb)
   "(upper-left-x upper-left-y bottom-right-x bottom-right-y) to
    (upper-left-x upper-left-y  w h)"
-  (let ((x1 (first coords))
-        (y1 (second coords))
-        (x2 (third coords))
-        (y2 (fourth coords)))
-  (list x1 y1 (- x2 x1) (- y2 y1))))
+  (let ((x1 (aabb-min-x aabb))
+        (y1 (aabb-min-y aabb))
+        (x2 (aabb-max-x aabb))
+        (y2 (aabb-max-y aabb)))
+    (list x1 y1 (- x2 x1) (- y2 y1))))
 
 (defun rect->aabb (coords)
   "(upper-left-x upper-left-y  w h) to
    (upper-left-x upper-left-y bottom-right-x bottom-right-y)"
-  (let ((x1 (first coords))
-        (y1 (second coords))
-        (w (third coords))
-        (h (fourth coords)))
-  (list x1 y1 (+ x1 w) (+ y1 h))))
+  (let ((x1 (elt coords 0))
+        (y1 (elt coords 1))
+        (w  (elt coords 2))
+        (h  (elt coords 3)))
+    (list x1 y1 (+ x1 w) (+ y1 h))))
 
 (defun inside-aabb-p (aabb x y)
   "t if x y is inside this bounding box
    aabb is in the form: (upper-left-x upper-left-y bottom-right-x bottom-right-y)"
-  (and
-   (> x (first aabb))
-   (< x (third aabb))
-   (> y (second aabb))
-   (< y (fourth aabb))))
+  (and (> x (aabb-min-x aabb))
+       (< x (aabb-max-x aabb))
+       (> y (aabb-min-y aabb))
+       (< y (aabb-max-y aabb))))
 
+(defun trasl-aabb (aabb &optional (dx (- (elt aabb 0))) (dy (- (elt aabb 1))))
+  (list (+ (aabb-min-x aabb) dx)
+        (+ (aabb-min-y aabb) dy)
+        (+ (aabb-max-x aabb) dx)
+        (+ (aabb-max-y aabb) dy)))
+
+(defun trasl-rect (rect &optional (dx (- (elt rect 0))) (dy (- (elt rect 1))))
+  (list (+ (elt rect 0) dx)
+        (+ (elt rect 1) dy)
+        (elt rect 2)
+        (elt rect 3)))
+
+(defun find-min-max (function the-list)
+  (restart-case
+      (reduce #'(lambda (a b) (if (funcall function a b) a b)) the-list)
+    (use-value (e) e)))
+
+(defun find-min (the-list)
+  (find-min-max #'< the-list))
+
+(defun find-max (the-list)
+  (find-min-max #'> the-list))
+
+(defun rotate-aabb* (aabb angle)
+  (let* ((vertices (list
+                    (2d-vector-rotate (list (elt aabb 0) (elt aabb 1)) angle)
+                    (2d-vector-rotate (list (elt aabb 2) (elt aabb 1)) angle)
+                    (2d-vector-rotate (list (elt aabb 2) (elt aabb 3)) angle)
+                    (2d-vector-rotate (list (elt aabb 0) (elt aabb 3)) angle)))
+         (all-x (mapcar #'(lambda (v) (elt v 0)) vertices))
+         (all-y (mapcar #'(lambda (v) (elt v 1)) vertices)))
+    (list (find-min all-x) (find-min all-y)
+          (find-max all-x) (find-max all-y))))
+
+(defun center-aabb (aabb)
+  (let ((rect (aabb->rect aabb)))
+    (list (+ (elt rect 0) (/ (elt rect 2) 2))
+          (+ (elt rect 1) (/ (elt rect 3) 2)))))
+
+(defun rotate-aabb (aabb angle &optional (pivot (list 0 0)))
+  (let ((traslated (trasl-aabb aabb (- (elt pivot 0)) (- (elt pivot 1)))))
+    (trasl-aabb (rotate-aabb* traslated angle) (elt pivot 0) (elt pivot 1))))
+
+(defun scale-aabb (aabb scale-x scale-y)
+  (let ((center (center-aabb aabb)))
+    (let* ((cx (elt center 0))
+           (cy (elt center 1))
+           (translated (trasl-aabb aabb (- cx) (- cy)))
+           (a (* (aabb-min-x translated) scale-x))
+           (b (* (aabb-min-y translated) scale-y))
+           (c (* (aabb-max-x translated) scale-x))
+           (d (* (aabb-max-y translated) scale-y)))
+      (list (+ a cx) (+ b cy) (+ c cx) (+ d cy)))))
 
 (defun line-eqn(a b &optional (thresh 1e-5))
   "Calculate a bidimensional line equation crossing vector a and b.
@@ -49,14 +126,11 @@
       (t
        (list (/ dy dx) (- (second a ) (* (/ dy dx) (first a))) nil nil)))))
 
-
-
 (defun recursive-bezier (pairs &key (threshold 1))
   (labels ((midpoint (pb pe)
              (mapcar #'(lambda (x) (/ x 2)) (2d-vector-sum pb pe)))
            (eqvec-p (a b) (and (= (first a) (first b))
                                (= (second a) (second b)))))
-
     (let* ((p1 (first pairs))
            (p2 (second pairs))
            (p3 (third pairs))
@@ -77,14 +151,10 @@
            :test #'eqvec-p)
           nil))))
 
-
-
-
 (defmacro funcall-if-not-null (func val)
   (if (not (null func))
       `(funcall ,func ,val)
       val))
-
 
 (defun 2d-vector-map (v &key (funcx nil) (funcy nil))
   "Return a list of x,y values of the vector transformed by funcx and funcy (if not nil) respectively"
@@ -101,11 +171,9 @@
   "Remap pairs applying funcx and funcy (if not nil) to each component"
   (mapcar #'(lambda (v) (2d-vector-map v :funcx funcx :funcy funcy)) pairs))
 
-
 (defun 2d-vector-list-scale (pairs &optional (ax 1) (ay 1))
   "Remap pairs scaling each components by ax and ay"
   (mapcar #'(lambda (v) (2d-vector-scale v ax ay)) pairs))
-
 
 (defun 2d-vector-list-translate (pairs &optional (dx 0) (dy 0))
   "translate pairs by dx and dy"
@@ -124,7 +192,7 @@
   (mapcar #'(lambda (x y) (- x y)) a b))
 
 (defun 2d-vector-dot-product (a b)
- (+ (* (first a) (first b)) (* (second a) (second b))))
+  (+ (* (first a) (first b)) (* (second a) (second b))))
 
 (defun 2d-vector-cross-product (a b)
   (- (* (first a) (second b)) (* (second a) (first b))))
@@ -142,7 +210,6 @@
   (let ((mag (2d-vector-magn a)))
     (list (/ (first a) mag) (/ (second a) mag))))
 
-
 (defun 2d-vector-angle (a b)
   (let* ((a-norm (2d-vector-normalize a))
          (b-norm (2d-vector-normalize b))
@@ -152,7 +219,6 @@
     (if (< (2d-vector-cross-product a b) 0)
         (- angle)
         angle)))
-
 
 (defun 2d-vector-rotate (a angle)
   (list
@@ -176,7 +242,6 @@
                                   (if (not (null modfunc-y))
                                       (mapcar modfunc-y ys)
                                       ys))))
-
 
 (defun interleaved-xy->pair (xy)
   (macrolet ((get-from-list (when-clause list)

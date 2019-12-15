@@ -107,9 +107,25 @@
    :point->centimeter
    :point->inch
 
+   :vec-x
+   :vec-y
+   :aabb-min-x
+   :aabb-max-x
+   :aabb-min-y
+   :aabb-max-y
+   :aabb-area
    :aabb->rect
    :rect->aabb
    :inside-aabb-p
+   :trasl-aabb
+   :trasl-rect
+   :find-min-max
+   :find-min
+   :find-max
+   :rotate-aabb*
+   :center-aabb
+   :rotate-aabb
+   :scale-aabb
    :line-eqn
    :recursive-bezier
    :2d-vector-map
