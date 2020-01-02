@@ -22,7 +22,7 @@
 
 (defparameter *page-size* +a4-page-size+)
 
-(defparameter *color* cl-colors:+firebrick+)
+(defparameter *color* cl-colors2:+firebrick+)
 
 (defparameter *rect-size* 0.1) ; 0.1 mm
 

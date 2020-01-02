@@ -8,11 +8,12 @@
 (defpackage :cl-pslib
   (:use :cl
         :cffi
-        :cl-colors)
+        :cl-colors2)
   (:export
    :page-size
    :width
    :height
+   :with-page-sizes
    :+a0-paper-width+
    :+a0-paper-height+
    :+a1-paper-width+

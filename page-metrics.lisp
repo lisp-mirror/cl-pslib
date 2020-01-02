@@ -31,7 +31,9 @@
 
 (eval-when (:load-toplevel)
   (define-iso216-papersize gen-papersize-iso216-list "A" 1189)
+
   (define-iso216-papersize gen-papersize-iso216-list "B" 1414)
+
   (define-iso216-papersize gen-papersize-iso216-list "C" 1414))
 
 (eval-when (:load-toplevel :compile-toplevel)
@@ -59,8 +61,11 @@
   (defmethod make-load-form ((object page-size) &optional environment)
     (make-load-form-saving-slots object
                                  :slot-names '(width height)
-                                 :environment environment)))
-
+                                 :environment environment))
+  (defmacro with-page-sizes ((page-width page-height) page &body body)
+    `(with-accessors ((,page-width  width)
+                      (,page-height height)) ,page
+      ,@body)))
 
 (eval-when (:load-toplevel)
   (defmacro define-iso216-constants-page-size (prefix)

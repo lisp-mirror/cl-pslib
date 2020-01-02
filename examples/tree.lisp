@@ -19,11 +19,11 @@
 
 (defparameter *output* "pslib-tree-examples.ps")
 
-(defparameter *trunk-color* cl-colors:+firebrick+)
+(defparameter *trunk-color* cl-colors2:+firebrick+)
 
-(defparameter *leaves-color* (list cl-colors:+yellow+
-                                   cl-colors:+violetred+
-                                   cl-colors:+green+))
+(defparameter *leaves-color* (list cl-colors2:+yellow+
+                                   cl-colors2:+violetred+
+                                   cl-colors2:+green+))
 (defparameter *line-width* 8.0)
 
 (defparameter *page-size* +a4-page-size+)

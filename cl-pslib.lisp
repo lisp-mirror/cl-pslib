@@ -590,14 +590,14 @@
   (with-psdoc-ptr (ptr) object
     (ps_setcolor ptr type color-space (co-sf c1) (co-sf c2) (co-sf c3) (co-sf c4))))
 
-(defmethod setcolor ((object psdoc) (type string) (color cl-colors:rgb)
+(defmethod setcolor ((object psdoc) (type string) (color cl-colors2:rgb)
                      &optional c1 c2 c3 c4)
   (declare (ignore c1 c2 c3 c4))
   (with-psdoc-ptr (ptr) object
     (ps_setcolor ptr type +color-space-rgb+
-                 (co-sf (cl-colors:rgb-red color))
-                 (co-sf (cl-colors:rgb-green color))
-                 (co-sf (cl-colors:rgb-blue color))
+                 (co-sf (cl-colors2:rgb-red color))
+                 (co-sf (cl-colors2:rgb-green color))
+                 (co-sf (cl-colors2:rgb-blue color))
                  1.0)))
 
 (defmethod setflat ((object psdoc) (val number))
