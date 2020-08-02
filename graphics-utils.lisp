@@ -32,6 +32,20 @@
   (let ((rect (aabb->rect aabb)))
     (* (elt rect 2) (elt rect 3))))
 
+(defun aabb-expand (aabb vertex)
+  (let ((max-x (aabb-max-x aabb))
+        (max-y (aabb-max-y aabb))
+        (min-x (aabb-min-x aabb))
+        (min-y (aabb-min-y aabb)))
+    (when (> (elt vertex 0) max-x)
+      (setf (elt aabb 2) (elt vertex 0)))
+    (when (> (elt vertex 1) max-y)
+      (setf (elt aabb 3) (elt vertex 1)))
+    (when (< (elt vertex 0) min-x)
+      (setf (elt aabb 0) (elt vertex 0)))
+    (when (< (elt vertex 1) min-y)
+      (setf (elt aabb 1) (elt vertex 1)))))
+
 (defun aabb->rect (aabb)
   "(upper-left-x upper-left-y bottom-right-x bottom-right-y) to
    (upper-left-x upper-left-y  w h)"

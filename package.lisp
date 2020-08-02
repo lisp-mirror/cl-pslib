@@ -115,6 +115,7 @@
    :aabb-min-y
    :aabb-max-y
    :aabb-area
+   :aabb-expand
    :aabb->rect
    :rect->aabb
    :inside-aabb-p
