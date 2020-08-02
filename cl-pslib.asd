@@ -11,7 +11,7 @@
   :description "A CFFI wrapper for the pslib library, a library for generating PostScript files."
   :licence "LLGPL"
   :maintainer "cage <cage-dev@twistfold.it>"
-  :version "0.0.1"
+  :version "0.0.2"
   :depends-on (:alexandria
                :cffi
 	       :cl-colors2
