@@ -36,4 +36,6 @@
 				   "conditions"
 				   "page-metrics"
 				   "graphics-utils"
-				   "pslib"))))
+				   "pslib"))
+               (:file "shapes"
+                      :depends-on ("cl-pslib"))))

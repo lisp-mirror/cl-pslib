@@ -366,5 +366,8 @@
    :bezier-to
    :accomodate-text
    :draw-text-confined-in-box
+   :with-stroke
+   :with-fill-stroke
    :rounded-rectangle
-   :with-stroke))
+   :regular-polygon
+   :star))

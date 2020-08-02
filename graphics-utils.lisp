@@ -239,7 +239,6 @@
    (- (* (first a) (cos angle)) (* (second a) (sin angle)))
    (+ (* (first a) (sin angle)) (* (second a) (cos angle)))))
 
-
 (defun xy->pair (xs ys)
   "Convert (x1 x2 x3...) (y1 y2 y3...) to ((x1 y1) (x2 y2) (x3 y3) ...)"
   (mapcar #'(lambda (x y) (list x y)) xs ys))
