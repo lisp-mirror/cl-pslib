@@ -34,8 +34,7 @@
     :type page-size)
    (filename
     :initform nil
-    :accessor filename
-    :type string)
+    :accessor filename)
    (writeproc
     :initform (callback write-to-string)
     :accessor writeproc
