@@ -10,8 +10,9 @@
   :author "cage <cage-dev@twistfold.it>"
   :description "A CFFI wrapper for the pslib library, a library for generating PostScript files."
   :licence "LLGPL"
-  :maintainer "cage <cage-dev@twistfold.it>"
-  :version "0.0.2"
+  :maintainer "cage"
+  :bug-tracker "https://notabug.org/cage/cl-pslib/issues"
+  :version "0.0.3"
   :depends-on (:alexandria
                :cffi
 	       :cl-colors2
