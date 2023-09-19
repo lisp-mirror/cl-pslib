@@ -1,4 +1,7 @@
 [[http://quickdocs.org/cl-pslib/][http://quickdocs.org/badge/cl-pslib.svg]]
+
+* moved to [[https://codeberg.org/cage/cl-pslib]]
+
 * Important note
   The 'ps' nickname for this package has been removed.
 
